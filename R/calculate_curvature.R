@@ -1,0 +1,41 @@
+totalK_fun<-function (x_range, poly_list, subdiv)
+{
+  stopifnot(is.atomic(x_range)) # is.atomic checks that x.range cannot be a list or expression
+  if (!is.numeric(x_range))
+    stop("'x_range' must be a numeric vector!")
+  if (length(x_range) != 2)
+    stop("'x_range' must be a vector of length two!")
+  if (diff(x_range) < 0) #calculates the difference between x1 and x2 to ensure it's >0
+    stop("please reorder 'x_range'.")
+  # if (!inherits(fun, "function"))
+  #   stop("'fun' must be a 'function' of x!")
+
+  # dfun <- deriv3(fun2form(fun), "x", func = TRUE) #func=TRUE returns a function
+
+  exp_list <- lapply(poly_list, f) #a list of polynomial expressions to be read by deriv3()
+  dfun <- deriv3(exp_list, "x", func=TRUE) %>% unname()
+
+  if (attr(dfun(x_range[1]), "gradient") == attr(dfun(x_range[2]), "gradient"))  #make sure function is not a straight line
+    stop("'fun' should not be a linear function of x!")
+
+  iter<- seq(0, 1, by=1/subdiv) #create vector of subdivisions to calculate arclength parameter
+  arcfun_lst<- list() #empty bin
+  b<- pracma::arclength(param_fun, x_range[1], x_range[2])$length #arc length of t-parameterized function
+
+  for(i in seq_along(iter)){
+    arcfun_lst[[i]] <-
+      local({
+        b_sub<-iter[i]*b
+        function(u) pracma::arclength(param_fun, x_range[1], u)$length - b_sub
+      })
+  }
+
+  root_find<- function(x) uniroot(x, x_range)$root #root-finding function
+
+  x <- sapply(arcfun_lst, root_find) #find roots for a list of
+  y <- func_lst(x)
+  gr <- attr(dfun(x), "gradient") #the tangents (first derv) of the x_n components, dfun() is defined above. The gradient matrix has elements that are the first deriv of a function
+  he <- attr(dfun(x), "hessian")[, , "x"] # x is in the third dimension of this object (df?). The hessian matrix has elements that are the second deriv of a function
+  k <- abs(he)/(1 + gr^2)^(3/2) #has n=subdiv measurements of k
+  k_total<-(sum(k) /subdiv) *(180/pi) #add all measurements of k, rescale depending on #of subdivisions, and convert from rad to degrees
+}
