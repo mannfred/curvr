@@ -26,8 +26,11 @@
 # https://stackoverflow.com/questions/40438195/function-for-polynomials-of-arbitrary-order-symbolic-method-preferred
 
 express <- function(poly, expr = TRUE) {
-    coeffs <- poly[[1]]  #extract coefficients from npoly list
-    stringexpr <- paste("x", seq_along(coeffs) - 1, sep = " ^ ")
+
+    #extract coefficients from npoly list
+    coeffs <- poly[[1]]
+    stringexpr <- paste("x", seq_along(coeffs) - 1,
+                        sep = " ^ ")
     stringexpr <- paste(stringexpr, coeffs, sep = " * ")
     stringexpr <- paste(stringexpr, collapse = " + ")
     if (expr)
@@ -67,14 +70,18 @@ express <- function(poly, expr = TRUE) {
 
 
 param <- function(poly, expr = TRUE) {
-    coeffs <- poly[[1]]  #extract coefficients from npoly list
-    stringchar <- paste("x", seq_along(coeffs) - 1, sep = " ^ ")
+
+    #extract coefficients from npoly list
+    coeffs <- poly[[1]]
+    stringchar <- paste("x", seq_along(coeffs) - 1,
+                        sep = " ^ ")
     stringchar <- paste(stringchar, coeffs, sep = " * ")
     stringchar <- paste(stringchar, collapse = " + ")
     paramchar <- paste("x", stringchar, sep = " , ")
     bodychar <- paste0("c(", paramchar, ")")  #add 'c()'
 
-    bodyexp <- eval(parse(text = paste("alist(", bodychar, ")")))
+    bodyexp <- eval(parse(text = paste("alist(", bodychar,
+                                       ")")))
 
     f <- function(x) NULL
     body(f) <- bodyexp[[1]]
@@ -103,9 +110,12 @@ param <- function(poly, expr = TRUE) {
 #'
 #' param_poly <- param(Momocs_poly)
 #'
-#' iter <- seq(0, 1, by=1/subdiv) #create vector of subdivisions to calculate arclength parameter
+#' #create vector of subdivisions to calculate arclength parameter
+#' iter <- seq(0, 1, by=1/subdiv)
 #' arcfun_lst<- list() #empty bin
-#' b <- pracma::arclength(param_poly, x_range[1], x_range[2])$length #arc length of t-parameterized function
+#'
+#' #arc length of t-parameterized function
+#' b <- pracma::arclength(param_poly, x_range[1], x_range[2])$length
 #'
 #' # for every fraction of arclength, b*i, create a function(u) with an unknown
 #' # x-coordinate, u. Solve for u by uniroot().
@@ -117,12 +127,13 @@ param <- function(poly, expr = TRUE) {
 #'        })
 #'}
 
-#' root_find <- function(x) uniroot(x, x_range)$root #root-finding function
+#' #root-finding function
+#' root_find <- function(x) uniroot(x, x_range)$root
 
-# parameterize polynomial function by arc length
-#' x <- sapply(arcfun_list, root_find) #find roots for a list of
+#' # parameterize polynomial function by arc length
+#' x <- sapply(arcfun_list, root_find) # find roots for a list of
 #'
-#' solve for corresponding y-values
+#' # solve for corresponding y-values
 #' func_poly <- func(Momocs_poly)
 #'
 #' y <- func_poly(x)
@@ -133,18 +144,20 @@ param <- function(poly, expr = TRUE) {
 # func()
 
 func <- function(poly, expr = TRUE) {
-    coeffs <- poly[[1]]  #extract coefficients from npoly list
-    stringexpr <- paste("x", seq_along(coeffs) - 1, sep = " ^ ")
+
+    #extract coefficients from npoly list
+    coeffs <- poly[[1]]
+    stringexpr <- paste("x", seq_along(coeffs) - 1,
+                        sep = " ^ ")
     stringexpr <- paste(stringexpr, coeffs, sep = " * ")
     stringexpr <- paste(stringexpr, collapse = " + ")
 
-    bodyexp <- eval(parse(text = paste("alist(", stringexpr, ")")))  #function body
+    bodyexp <- eval(parse(text = paste("alist(", stringexpr,
+                                       ")")))  #function body
     args <- alist(x = )  #variable names
 
     f <- as.function(c(args, bodyexp), env = parent.frame())
     f
 }
-
-
 
 
