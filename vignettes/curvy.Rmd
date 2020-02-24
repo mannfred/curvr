@@ -1,0 +1,34 @@
+---
+title: "Introduction to curvy"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(curvy)
+library(dplyr)
+library(Momocs)
+library(pracma)
+```
+
+
+Flower-pollinator curvature as viewed from the side (dorsiventral plane), has been a trait of special interest since the post-Darwin era of pollination ecology. However, within pollination ecology there are at least four metrics in use with few references to their origins or the meaning of the associated units . We recently suggested clarifying the defintion of curvature by using concepts of differential geometry [@boehm_2020]. 
+
+Intuitively, curvature is the degree to which a line is not straight, or more formally, the rate at which the unit derivative $\mathbf{T}$ changes direction with respect to arc length, $s$. 
+
+$$\kappa = \frac{d \mathbf{T}}{ds}$$ 
+
+To apply this definition we suggested a protocol [@boehm_2020] wherein a line is regressed against landmarks placed on an image of a curved organ or organism, then curvature is computed at many points along the fitted line and the sum taken.
+
+The R package ```curvy``` computes curvature along polynomials fitted to landmarks placed on images of specimens. ```curvy``` is designed to take inputs from ```Momocs```, an open-source toolkit for 2D morphometrics in R. 
+

@@ -13,6 +13,10 @@ Imports:
     dplyr (>= 0.8.3),
     pracma (>= 2.2.5),
     stats
-Suggests: Momocs,
-          Momit
+Suggests: 
+    Momocs,
+    Momit,
+    knitr,
+    rmarkdown
 RoxygenNote: 7.0.2
+VignetteBuilder: knitr
