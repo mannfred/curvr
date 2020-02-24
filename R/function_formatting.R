@@ -99,7 +99,34 @@ param <- function(poly, expr = TRUE) {
 #'
 #' my_poly <- Momocs::npoly(mdat, 2)
 #'
-#' func(my_poly)
+#'@examples
+#'
+#' param_poly <- param(Momocs_poly)
+#'
+#' iter <- seq(0, 1, by=1/subdiv) #create vector of subdivisions to calculate arclength parameter
+#' arcfun_lst<- list() #empty bin
+#' b <- pracma::arclength(param_poly, x_range[1], x_range[2])$length #arc length of t-parameterized function
+#'
+#' # for every fraction of arclength, b*i, create a function(u) with an unknown
+#' # x-coordinate, u. Solve for u by uniroot().
+#' for(i in seq_along(iter)){
+#'    arcfun_list[[i]] <-
+#'        local({
+#'            b_sub<-iter[i]*b
+#'            function(u) pracma::arclength(param_poly, x_range[1], u)$length - b_sub
+#'        })
+#'}
+
+#' root_find <- function(x) uniroot(x, x_range)$root #root-finding function
+
+# parameterize polynomial function by arc length
+#' x <- sapply(arcfun_list, root_find) #find roots for a list of
+#'
+#' solve for corresponding y-values
+#' func_poly <- func(Momocs_poly)
+#'
+#' y <- func_poly(x)
+#'
 #' @seealso \code{\link{express}} for converting Momocs polynomials to expressions
 #' and \code{\link{param}} for parameterizing by t.
 
@@ -117,5 +144,7 @@ func <- function(poly, expr = TRUE) {
     f <- as.function(c(args, bodyexp), env = parent.frame())
     f
 }
+
+
 
 

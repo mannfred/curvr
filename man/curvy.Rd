@@ -20,7 +20,7 @@ by arclength and computing derivatives. The helper function \code{param()} conve
 polynomial objects from Momocs into t-parameterized polynomials readable by
 \code{pracma::arclength()}. \code{func()} allows us to compute the y coordinates
 of our polynomial once the x-coordinates of the arclength parameterized function
-are known. \code{express} converts our Momocs polynomial to an expression
+are known. \code{express()} converts our Momocs polynomial to an expression
 so that derivatives can be computed using \code{deriv3()}.
 }
 
