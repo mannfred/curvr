@@ -5,7 +5,7 @@ Version: 0.0.0.9000
 Authors@R: person("Mannfred Masahiro Asada", "Boehm", , "mannfred.boehm@ubc.ca", c("aut", "cre"))
 Description: Calculate curvature from polynomial functions 
     fitted to landmarked specimens. 
-License: GNU General Public License (>= v3.0)
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0)

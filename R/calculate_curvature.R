@@ -36,7 +36,7 @@
 #' my_poly <- Momocs::npoly(mdat, 2)
 #'
 #' #extract x bounds from Momocs polynomial object
-#' x_range <- c(my_poly$baseline1, my_poly$baseline2)
+#' x_range <- c(my_poly$baseline1[[1]], my_poly$baseline2[[1]])
 #'
 #' totalK(x_range, my_poly, 100)
 #'
@@ -87,7 +87,7 @@ totalK <- function(x_range, Momocs_poly, subdiv) {
 
   #create vector of subdivisions to calculate arclength parameter
   iter <- seq(0, 1, by = 1/subdiv)
-  arcfun_lst <- list()
+  arcfun_list <- list()
 
   #arc length of t-parameterized function
   b <- pracma::arclength(param_poly, x_range[1],

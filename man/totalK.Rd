@@ -45,7 +45,7 @@ mdat <- matrix(c(x,y), nrow=10, ncol=2)
 my_poly <- Momocs::npoly(mdat, 2)
 
 #extract x bounds from Momocs polynomial object
-x_range <- c(my_poly$baseline1, my_poly$baseline2)
+x_range <- c(my_poly$baseline1[[1]], my_poly$baseline2[[1]])
 
 totalK(x_range, my_poly, 100)
 

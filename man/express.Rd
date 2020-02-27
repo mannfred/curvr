@@ -14,7 +14,7 @@ an expression.
 }
 \description{
 Convert polynomial objects from Momocs into expressions
-that can be evaluated by e.g. \code{stats::deriv3()}.
+for computing derivatives in R e.g. \code{stats::deriv3()}.
 }
 \examples{
 
