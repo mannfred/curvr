@@ -49,4 +49,5 @@ x_range <- c(my_poly$baseline1[[1]], my_poly$baseline2[[1]])
 
 totalK(x_range, my_poly, 100)
 
+
 }

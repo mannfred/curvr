@@ -40,6 +40,10 @@
 #'
 #' totalK(x_range, my_poly, 100)
 #'
+#'
+#' @importFrom dplyr %>%
+#' @importFrom stats deriv3
+#' @importFrom stats uniroot
 #' @export
 
 
