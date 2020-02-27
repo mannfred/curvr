@@ -17,6 +17,9 @@ Convert polynomial objects from Momocs into a function
  readable by ...
 }
 \examples{
+
+library(Momocs)
+
 x <- 1:10
 y <- x^2
 
@@ -25,7 +28,35 @@ mdat <- matrix(c(x,y), nrow=10, ncol=2)
 
 my_poly <- Momocs::npoly(mdat, 2)
 
-func(my_poly)
+
+param_poly <- param(Momocs_poly)
+
+#create vector of subdivisions to calculate arclength parameter
+iter <- seq(0, 1, by=1/subdiv)
+arcfun_lst<- list() #empty bin
+
+#arc length of t-parameterized function
+b <- pracma::arclength(param_poly, x_range[1], x_range[2])$length
+
+# for every fraction of arclength, b*i, create a function(u) with an unknown
+# x-coordinate, u. Solve for u by uniroot().
+for(i in seq_along(iter)){
+   arcfun_list[[i]] <-
+       local({
+           b_sub<-iter[i]*b
+           function(u) pracma::arclength(param_poly, x_range[1], u)$length - b_sub
+       })
+}
+#root-finding function
+root_find <- function(x) uniroot(x, x_range)$root
+# parameterize polynomial function by arc length
+x <- sapply(arcfun_list, root_find) # find roots for a list of
+
+# solve for corresponding y-values
+func_poly <- func(Momocs_poly)
+
+y <- func_poly(x)
+
 }
 \seealso{
 \code{\link{express}} for converting Momocs polynomials to expressions

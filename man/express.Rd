@@ -17,6 +17,9 @@ Convert polynomial objects from Momocs into expressions
 that can be evaluated by e.g. \code{stats::deriv3()}.
 }
 \examples{
+
+library(Momocs)
+
 x <- 1:10
 y <- x^2
 

@@ -18,6 +18,9 @@ Convert polynomial objects from Momocs into t-parameterized
 polynomials readable by \code{pracma::arclength()}.
 }
 \examples{
+
+library(Momocs)
+
 x <- 1:10
 y <- x^2
 

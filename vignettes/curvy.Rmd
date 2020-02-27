@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(curvy)
+#library(curvy)
 library(dplyr)
 library(Momocs)
 library(pracma)

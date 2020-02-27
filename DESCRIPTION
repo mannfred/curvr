@@ -17,6 +17,7 @@ Suggests:
     Momocs,
     Momit,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 RoxygenNote: 7.0.2
 VignetteBuilder: knitr

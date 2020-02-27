@@ -24,6 +24,9 @@
 #' between specimens.
 #'
 #' @examples
+#'
+#' library(Momocs)
+#'
 #' x <- 1:10
 #' y <- x^2
 #'
@@ -36,6 +39,8 @@
 #' x_range <- c(my_poly$baseline1, my_poly$baseline2)
 #'
 #' totalK(x_range, my_poly, 100)
+#'
+#' @export
 
 
 
@@ -89,8 +94,7 @@ totalK <- function(x_range, Momocs_poly, subdiv) {
                          x_range[2])$length
 
   # for every fraction of arclength, b*i, create a
-  # function(u) with an unknown x-coordinate, u.
-  # Solve for u by uniroot().
+  # function(u) with an unknown x-coordinate, u
   for (i in seq_along(iter)) {
     arcfun_list[[i]] <- local({
       b_sub <- iter[i] * b
@@ -99,6 +103,7 @@ totalK <- function(x_range, Momocs_poly, subdiv) {
     })
   }
 
+  # Solve for u value that gives arclength=b*i
   root_find <- function(x) uniroot(x, x_range)$root  #root-finding function
 
   # parameterize polynomial function by arc length
