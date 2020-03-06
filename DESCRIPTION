@@ -1,7 +1,7 @@
-Package: curvy
+Package: curvr
 Type: Package
 Title: Calculate Point-Wise Curvature From Polynomials
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: person("Mannfred Masahiro Asada", "Boehm", , "mannfred.boehm@ubc.ca", c("aut", "cre"))
 Description: Calculate curvature from polynomial functions 
     fitted to landmarked specimens. 

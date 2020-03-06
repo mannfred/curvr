@@ -1,0 +1,81 @@
+---
+title: "Introduction to curvr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+#library(curvy)
+library(dplyr)
+library(Momocs)
+library(pracma)
+```
+
+#### Abstract
+
+1. Flower-pollinator curvature as viewed from the side (dorsiventral plane) has been a trait of special interest since the post-Darwin era of pollination ecology. However, within pollination ecology there are at least four metrics in use with few references to their origins or the meaning of the associated units . We recently suggested clarifying the defintion of curvature by using concepts of differential geometry [@boehm_2020]. 
+
+
+2. Here, we present an R package ```curvr``` for computing curvature along polynomials fitted to landmarks placed on images of specimens. ```curvr``` is designed to take inputs from ```Momocs```, an open-source toolkit for 2D morphometrics in R. 
+
+3. Using Darwin's finches (Geospizinae) as an example, we show how analyzing bill shape for curvature can compliment morphometric analyses. 
+
+4. 
+
+\newpage
+
+#### 1. Introduction
+
+In plant-pollinator systems, floral and dietary diversity has major effects on macroevolutionary and biogeographic patterns [@kay_2009; @armbruster_2009; @gomez_2016; @olsen_2017; @vamosi_2018], and curvature is widespread feature of morphological diversity. We recently reviewed the current state of knowledge of curved plant-pollinator systems, and proposed that curvature is a concept that needs an exact definition and method of measurement. In the following section we summarize the approaches to measuring curvature within the field of pollination ecology, identify strengths and shortcomings, and offer a solution with the aim of improving the precision with which curvature is measured. Although this method is motivated by the problem of measuring curvature in plant-pollinator systems, the solution is general to any biological form modelled as a line curve: this case is hopefully made in the demonstration to follow.
+
+Intuitively, curvature is the degree to which a line is not straight, or more formally, the rate at which the unit derivative $\mathbf{T}$ changes direction with respect to arc length, $s$. 
+
+$$\kappa = \frac{d \mathbf{T}}{ds}$$ 
+
+To apply this definition we suggested a protocol [@boehm_2020] wherein a line is regressed against landmarks placed on an image of a curved organ or organism, then curvature is computed at many points along the fitted line and the sum taken.
+
+We recommend using at least 800 subdivisions:
+
+```
+x <- 1:10
+y <- x^2
+mdat <- matrix(c(x,y), nrow=10, ncol=2)
+my_poly <- Momocs::npoly(mdat, 2)
+  
+K5     <- totalK(c(0,1), my_poly, 5)
+K20    <- totalK(c(0,1), my_poly, 20)
+K50    <- totalK(c(0,1), my_poly, 50)
+K200   <- totalK(c(0,1), my_poly, 200)
+K800   <- totalK(c(0,1), my_poly, 800)
+K2000  <- totalK(c(0,1), my_poly, 2000)
+K10000 <- totalK(c(0,1), my_poly, 10000)
+
+subdiv <- c(5, 20, 50, 200, 800, 2000, 10000)
+K_values <- c(55.34299, 46.00986, 44.1399, 43.20422, 42.97015, 42.92333, 42.89837)
+
+sub_vs_K <- matrix(nrow=7, ncol=2)
+sub_vs_K[,1] <- subdiv
+sub_vs_K[,2] <- K_values
+
+sK_tbl <- as_tibble(sub_vs_K)
+ggplot(data=sK_tbl, aes(V1, V2)) + geom_point()
+
+
+```
+example
+https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293
+
+pgs 184, 186o
+https://ebookcentral.proquest.com/lib/ubc/reader.action?docID=422384&ppg=18
+
+

@@ -72,10 +72,10 @@ totalK <- function(x_range, Momocs_poly, subdiv) {
     stop("subdiv must be a numeric vector of length 1.")
 
 
-  # compute derivates by curvy::express() and
+  # compute derivates by curvr::as_expression() and
   # deriv3()
-  exp_poly <- express(Momocs_poly)
-  dfun <- deriv3(exp_poly, "x", func = TRUE) %>%
+  express_poly <- as_expression(Momocs_poly)
+  dfun <- deriv3(express_poly, "x", func = TRUE) %>%
     unname()
 
   # make sure function is not a straight line
@@ -87,14 +87,14 @@ totalK <- function(x_range, Momocs_poly, subdiv) {
   # convert Momocs OpnCoe objects to t-parameterized
   # polynomials for pracma::arclength()
 
-  param_poly <- param(Momocs_poly)
+  param_poly <- as_param(Momocs_poly) #give function a clear name
 
   #create vector of subdivisions to calculate arclength parameter
   iter <- seq(0, 1, by = 1/subdiv)
   arcfun_list <- list()
 
   #arc length of t-parameterized function
-  b <- pracma::arclength(param_poly, x_range[1],
+  b <- pracma::arclength(param_poly, x_range[1], #name it arclength not b
                          x_range[2])$length
 
   # for every fraction of arclength, b*i, create a
@@ -106,13 +106,15 @@ totalK <- function(x_range, Momocs_poly, subdiv) {
                                     x_range[1], u)$length - b_sub
     })
   }
-
+  # give this a more clear name
   # Solve for u value that gives arclength=b*i
   root_find <- function(x) uniroot(x, x_range)$root  #root-finding function
 
+  # put this into the loop above
   # parameterize polynomial function by arc length
   x <- sapply(arcfun_list, root_find)  #find roots for a list of
 
+  # better names for x  like "arc x"
   # The tangents (first derv) of the x_n components, dfun() is defined above
   # The gradient matrix has elements that are the first deriv of a function
   gr <- attr(dfun(x), "gradient")

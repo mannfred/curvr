@@ -19,20 +19,20 @@
 #'
 #' my_poly <- Momocs::npoly(mdat, 2)
 #'
-#' express(my_poly)
+#' as_expression(my_poly)
 #'
-#' @seealso \code{\link{param}} for t-parameterizing Momocs polynomials
-#' and \code{\link{func}} for creating R functions.
+#' @seealso \code{\link{as_param}} for t-parameterizing Momocs polynomials
+#' and \code{\link{as_func}} for creating R functions.
 #'
 #' @export
 
 
-# express()
+# as_expression()
 
 # credit to user: \033$BM{E/8;\033(B at:
 # https://stackoverflow.com/questions/40438195/function-for-polynomials-of-arbitrary-order-symbolic-method-preferred
 
-express <- function(poly, expr = TRUE) {
+as_expression <- function(poly, expr = TRUE) {
 
     #extract coefficients from npoly list
     coeffs <- poly[[1]]
@@ -66,14 +66,14 @@ express <- function(poly, expr = TRUE) {
 #'
 #' my_poly <- Momocs::npoly(mdat, 2)
 #'
-#' param(my_poly)
+#' as_param(my_poly)
 #'
-#' @seealso \code{\link{express}} for converting Momocs polynomials to expressions
-#' and \code{\link{func}} for creating R functions.
+#' @seealso \code{\link{as_expression}} for converting Momocs polynomials to expressions
+#' and \code{\link{as_func}} for creating R functions.
 #'
 #' @export
 
-# param()
+# as_param()
 
 # how to create a fuction programatically
 # https://stackoverflow.com/questions/12982528/how-to-create-an-r-function-programmatically
@@ -81,7 +81,7 @@ express <- function(poly, expr = TRUE) {
 
 
 
-param <- function(poly) {
+as_param <- function(poly) {
 
     #extract coefficients from npoly list
     coeffs <- poly[[1]]
@@ -135,7 +135,7 @@ param <- function(poly) {
 #'
 #' my_poly <- Momocs::npoly(mdat, 2)
 #'
-#' param_poly <- param(my_poly)
+#' param_poly <- as_param(my_poly)
 #'
 #' subdiv <- 100 # number of times to subdivide the curve
 #' iter <- seq(0, 1, by=1/subdiv)
@@ -162,18 +162,18 @@ param <- function(poly) {
 #' x <- sapply(arcfun_list, root_find)
 #'
 #' # solve for corresponding y-values
-#' func_poly <- func(my_poly)
+#' func_poly <- as_func(my_poly)
 #'
 #' y <- func_poly(x)
 #'
-#' @seealso \code{\link{express}} for converting Momocs polynomials to expressions
+#' @seealso \code{\link{as_expression}} for converting Momocs polynomials to expressions
 #'
 #'
 #' @export
 
-# func()
+# as_func()
 
-func <- function(poly) {
+as_func <- function(poly) {
 
     #extract coefficients from npoly list
     coeffs <- poly[[1]]

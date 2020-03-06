@@ -1,7 +1,7 @@
-citHeader("To cite curvy in publications use:")
+citHeader("To cite curvr in publications use:")
 
 citEntry(entry = "Article",
-  title        = "curvy: An R package for calculating curvature from polynomial functions fitted to landmarked specimens.",
+  title        = "curvr: An R package for calculating curvature from polynomial functions fitted to landmarked specimens.",
   author       = personList(as.person("Mannfred Masahiro Asada Boehm")),
   journal      = "TBD",
   year         = "2020",
@@ -12,7 +12,7 @@ citEntry(entry = "Article",
 
   textVersion  =
   paste("Mannfred M.A. Boehm (2020).",
-        "curvy: An R package for calculating curvature from polynomial functions fitted to landmarked specimens.",
+        "curvr: An R package for calculating curvature from polynomial functions fitted to landmarked specimens.",
         "Journal of Statistical Software, 40(3), 1-25.",
         "URL http://www.jstatsoft.org/v40/i03/.")
 )
