@@ -7,11 +7,10 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+
+```{r include=FALSE} 
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+
 ```
 
 ```{r setup}
@@ -36,7 +35,25 @@ library(pracma)
 
 #### 1. Introduction
 
-In plant-pollinator systems, floral and dietary diversity has major effects on macroevolutionary and biogeographic patterns [@kay_2009; @armbruster_2009; @gomez_2016; @olsen_2017; @vamosi_2018], and curvature is widespread feature of morphological diversity. We recently reviewed the current state of knowledge of curved plant-pollinator systems, and proposed that curvature is a concept that needs an exact definition and method of measurement. In the following section we summarize the approaches to measuring curvature within the field of pollination ecology, identify strengths and shortcomings, and offer a solution with the aim of improving the precision with which curvature is measured. Although this method is motivated by the problem of measuring curvature in plant-pollinator systems, the solution is general to any biological form modelled as a line curve: this case is hopefully made in the demonstration to follow.
+In plant-pollinator systems, floral and dietary diversity has major effects on macroevolutionary and biogeographic patterns [@kay_2009; @armbruster_2009; @gomez_2016; @olsen_2017; @vamosi_2018], and curvature is widespread feature of morphological diversity. We recently reviewed the adaptive significance of curvature in plant-pollinator systems, and proposed that curvature is a concept that needs an exact definition and method of measurement [@boehm_2020]. Here, we detail the an R package ```curvr``` for measuring point-wise curvature from polynomials fitted to landmarked specimens. 
+
+```curvr``` is designed to work alongside common protocols in geometric morphometrics (GM) - the study of shape and its covariance with associated or causal variables [@bookstein_1991; @macleod_2002]. In pollination ecology flower shape has been analysed using GM in order to ....
+
+#### 2. The ```curvr``` package
+
+
+#### 3. Application of the model
+
+Table 1. Functions available in ```curvr``` version 0.1.0 for computing point-wise curvature
+
+Columns: Function, Method, Reference
+
+
+
+In GM analyses, 
+
+
+
 
 Intuitively, curvature is the degree to which a line is not straight, or more formally, the rate at which the unit derivative $\mathbf{T}$ changes direction with respect to arc length, $s$. 
 
@@ -73,6 +90,7 @@ ggplot(data=sK_tbl, aes(V1, V2)) + geom_point()
 
 ```
 example
+short: https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13385 
 https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293
 
 pgs 184, 186o
