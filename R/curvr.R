@@ -1,15 +1,16 @@
 #' curvr: Calculate Point-Wise Curvature From Landmarked Specimens
 #'
-#' Calculate point-wise curvature from polynomial functions
-#' fitted to landmarked specimens. \code{curvr} is designed
-#' to pipe from \code{Momocs}, where you can fit polynomial functions
-#' to landmark data. Future versions to incorporate other curve-fitting functions.
+#' Calculate point-wise curvature from
+#' landmarked specimens that have been fitted by polynomials in Momocs.
+#' Polynomials are parameterized by arc length to ensure even sampling
+#' intervals across the curve. Point-wise curvature is summed
+#' across the polynomial, outputting 'total curvature'.
 #'
 #' @section curvr functions:
 #' The main function of \code{curvr} is \code{total_curvature()} - it calculates point-wise
 #' curvature along bounded polynomials fitted to curved specimens (e.g. corolla tubes, bird bills).
 #'
-#' Calculating point-wise curvature, K, involves parameterizing your polynomial function
+#' Calculating point-wise curvature, K, involves parameterizing the fitted polynomial function
 #' by arclength and computing the tangent directions along the curve. The helper function
 #' \code{parameterize()} converts polynomial objects from \code{Momocs} into t-parameterized
 #' polynomials readable by \code{pracma::arclength()}. \code{as_function()} computes the
