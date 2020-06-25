@@ -1,23 +1,26 @@
 Package: curvr
 Type: Package
-Title: Calculate Point-Wise Curvature From Polynomials
+Title: Calculate Point-Wise Curvature From Landmarked Specimens
 Version: 0.1.0
-Authors@R: person("Mannfred Masahiro Asada", "Boehm", , "mannfred.boehm@ubc.ca", c("aut", "cre"))
-Description: Calculate curvature from polynomial functions 
-    fitted to landmarked specimens. 
+Authors@R: person("Mannfred Masahiro Asada", "Boehm", email = "mannfred.boehm@ubc.ca", 
+  role = c("aut", "cre"))
+Description: Calculate point-wise curvature from 
+    landmarked specimens that have been fitted by polynomials in Momocs.
+     Polynomials are parameterized by arc length to ensure even sampling
+    intervals across the curve. Point-wise curvature is summed 
+    across the polynomial, outputting 'total curvature'.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.6.0)
 Imports: 
     dplyr (>= 0.8.3),
-    pracma (>= 2.2.5),
-    stats
+    pracma (>= 2.2.5)
 Suggests: 
-    Momocs,
-    Momit,
-    knitr,
-    rmarkdown,
-    testthat
-RoxygenNote: 7.0.2
+    knitr (>= 1.28),
+    Momocs (>= 1.2.9),
+    Momit (>= 0.1.0),
+    rmarkdown (>= 2.1),
+    testthat (>= 2.3.2)
+RoxygenNote: 7.1.0
 VignetteBuilder: knitr

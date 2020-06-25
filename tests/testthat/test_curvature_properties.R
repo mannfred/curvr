@@ -9,10 +9,10 @@ test_that("number of subdivisions doesn't (greatly) affect K", {
   mdat <- matrix(c(x,y), nrow=10, ncol=2)
   my_poly <- Momocs::npoly(mdat, 2)
 
-  k200   <- totalK(c(0,1), my_poly, 200) %>% round()
-  k400   <- totalK(c(0,1), my_poly, 400) %>% round()
+  k200   <- total_curvature(my_poly, c(0,1),  200)$total_k %>% round()
+  k600   <- total_curvature(my_poly, c(0,1),  600)$total_k %>% round()
 
-expect_equal(k200, k400)
+expect_equal(k200, k600)
 })
 
 
@@ -21,12 +21,12 @@ test_that("curvature increases for steeper curves", {
   y1 <- x^2
   mdat <- matrix(c(x,y1), nrow=10, ncol=2)
   my_poly1 <- Momocs::npoly(mdat, 2)
-  k1 <- totalK(c(0,1), my_poly1, 100)
+  k1 <- total_curvature(my_poly1, c(0,1), 100)$total_k
 
   y2 <- x^3
   mdat2 <- matrix(c(x,y2), nrow=10, ncol=2)
   my_poly2 <- Momocs::npoly(mdat2, 2)
-  k2 <- totalK(c(0,1), my_poly2, 100)
+  k2 <- total_curvature(my_poly2, c(0,1), 100)$total_k
 
   # x^2 should have greater curvature than x^3 bw [0,1]
   expect_gt(k1, k2)
@@ -40,8 +40,8 @@ test_that("curvature is not signed", {
   my_poly <- Momocs::npoly(mdat, 2)
 
   # x^3 from [0,1] and [-1,0] should have equal curvature
-  k1 <- totalK(c(0, 1), my_poly, 50) %>% round(digits = 4)
-  k2 <- totalK(c(-1, 0), my_poly, 50) %>% round(digits = 4)
+  k1 <- total_curvature(my_poly, c(0, 1), 50)$total_k %>% round(digits = 4)
+  k2 <- total_curvature(my_poly, c(-1, 0), 50)$total_k %>% round(digits = 4)
 
   expect_equal(k1, k2)
 })

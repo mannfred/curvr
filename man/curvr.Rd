@@ -5,22 +5,22 @@
 \alias{curvr}
 \title{curvr: Calculate Point-Wise Curvature From Polynomials}
 \description{
-Calculate curvature from polynomial functions
+Calculate point-wise curvature from polynomial functions
 fitted to landmarked specimens. \code{curvr} is designed
-to pipe from \code{Momocs}, where you can estimate polynomial functions
-from landmark data.
+to pipe from \code{Momocs}, where you can fit polynomial functions
+to landmark data.
 }
 \section{curvr functions}{
 
-The main function of \code{curvr} is \code{totalK()}. This calculates point-wise
+The main function of \code{curvr} is \code{total_curvature()} - it calculates point-wise
 curvature along bounded polynomials fitted to curved specimens (e.g. cells, bird bills).
 
-Calculating curvature, K, involves parameterizing your polynomial function
-by arclength and computing derivatives. The helper function \code{as_param()} converts
-polynomial objects from Momocs into t-parameterized polynomials readable by
-\code{pracma::arclength()}. \code{as_func()} allows us to compute the y coordinates
-of our polynomial once the x-coordinates of the arclength parameterized function
-are known. \code{as_expression()} converts our Momocs polynomial to an expression
-so that derivatives can be computed using \code{deriv3()}.
+Calculating point-wise curvature, K, involves parameterizing your polynomial function
+by arclength and computing point-wise derivatives. The helper function \code{parameterize()} converts
+polynomial objects from \code{Momocs} into t-parameterized polynomials readable by
+\code{pracma::arclength()}. \code{as_function()} computes the y coordinates
+of our polynomial once the x-coordinates of the arclength-parameterized function
+are known. \code{as_expression()} converts a \code{Momocs} polynomial to an expression
+so that derivatives can be computed using \code{stats::deriv3()}.
 }
 
