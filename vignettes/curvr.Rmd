@@ -41,11 +41,15 @@ library(pracma)
 
 #### 1. Introduction
 
-The curvature of flowers and pollinator mouthparts (eg bird bills) is a widespread trait contributing to morphological diversity in the angiosperms and their pollinators. The evolutionary ecology and history of measuring curvature in pollination ecology was recently reviewed in [@boehm_2020]. To briefly summarize; the curvature of floral tubes as viewed from the dorsiventral plane (hereafter 'curvature') has long been recognized as morphological feature that contributes to floral isolation [sensu @grant_1949]. As curvature represents one of three spatial dimensions in which floral diversity can evolve (in addition to width and length), it is likely to play a role in floral diversification [@kay_2009; @armbruster_2009; @vamosi_2018]. Similarly, pollinators that specialize on curved flowers evolve curved mouthparts, contributing to morphological diversification of these clades [@weinstein_2017; @maruyama_2018].  Thus, flower-pollinator curvature has been of special interest to pollination ecologists, resulting in over 40 studies since the late 1970's. Among these studies [@boehm_2020] identified four metrics for defining and quantifying curvature, in addition to the more general approach of quantifying shape via geometric morphometrics. Despite the many approaches to measuring curvature there is a lack of consensus as to what curvature means, how to interpret their units, and how varying methods could or should be compared. To this end, [@boehm_2020] proposed a revised definition of curvature that directly borrowed from the mathematical literature, including an interpretation of accompanying units. 
+The curvature of flowers and pollinator mouthparts (e.g. bird bills) is a widespread trait contributing to morphological diversity in the angiosperms and their pollinators. The evolutionary ecology and history of measuring curvature in pollination ecology was recently reviewed in [@boehm_2020]. To briefly summarize; the curvature of floral tubes as viewed from the dorsiventral plane (hereafter 'curvature') has long been recognized as morphological feature that contributes to floral isolation [sensu @grant_1949]. As curvature represents one of three spatial dimensions through which floral diversity can evolve (in addition to width and length), it is likely to play a role in floral diversification [@kay_2009; @armbruster_2009; @vamosi_2018]. Similarly, pollinators that specialize on curved flowers evolve curved mouthparts, contributing to morphological diversification of these clades [@weinstein_2017; @maruyama_2018].  Thus, flower-pollinator curvature has been of special interest to pollination ecologists, resulting in over 40 studies since the late 1970's. Among these studies [@boehm_2020] identified four metrics for defining and quantifying curvature, in addition to the more general approach of quantifying shape via geometric morphometrics. Despite the many approaches to measuring curvature there is a lack of consensus as to what curvature means, how to interpret their units, and how varying methods could or should be compared. To this end, [@boehm_2020] proposed a revised definition of curvature that directly borrowed from the mathematical literature, including an interpretation of accompanying units. 
 
-Curvature, as defined in differential geometry, is the rate of directional change of the tangent, $\mathbf{T}$, with respect to arc length, $s$, along the curve: 
+Curvature, as defined in differential geometry, is the rate of change of the tangent, $\mathbf{T}$, with respect to arc length, $s$, along the curve: 
 
 $$\kappa = \frac{d \mathbf{T}}{ds}$$ 
+
+When the angle, $\phi$ of $\mathbf{T}$ is related to an axis of reference (e.g. the $x$ axis), curvature can be expressed as:
+
+$$\kappa = \frac{d\phi}{ds}$$
 
 For a straight line, the direction of the tangent is constant and therefore, curvature is zero. For a curved line, the tangent may drastically change direction from point to point, resulting in some non-zero value of curvature. Integrating point-wise curvature gives the _total curvature_ of a curve:
 
@@ -75,13 +79,14 @@ The result is a vector of $x$ values that correspond to even increments of arc l
 
 $$\kappa = \frac{|y''|}{(1+y'^2)^{\frac{3}{2}}}$$ 
 
-Although written differently than the equation for curvature stated in the introduction, this definition is equivalent.
 
-Finally, the point-wise curvature measurements are summed and converted from radians to degrees. The output of `curvr::total_curvature()` is _total curvature_ as defined above. 
+Although written differently than the equation for curvature stated in the introduction, this definition is equivalent [@rutter_2000, pp. 133-139]. 
+
+Finally, the point-wise curvature measurements are summed and converted from radians to degrees. The output of `curvr::total_curvature()` is a `list` containing point-wise and  total curvature as defined above. 
 
 Before submitting `Momocs` polynomials to `curvr`, the user first needs to inspect their list-object and extract the lower and upper $x$ bounds of their polynomial (coming soon to Vignettes). These bounds are entered as the `x_range` parameter of `curvr::total_curvature()`. Additionally, the user needs to specify the number of subdivisions made to their curve(s). Greater subdivisions more completely sample the curve, but increases computing time. It is recommended to use subdivisions on the order of 800 or greater. 
 
-In its current form, `curvr` accepts outputs from the R package `Momocs` [@bonhomme_2014], specifically polynomial objects fitted to landmarked specimens. Because polynomials will often miss local curvature features, the incoming version of `curvr` will adopt more sophisticated curve-fitting procedures from the field of outline-based morphometrics (discussed further in final section). 
+In its current form, `curvr` accepts outputs from the R package `Momocs` [@bonhomme_2014], specifically polynomial objects (`list`s, but not `OpnCoe`) fitted to landmarked specimens. Because polynomials will often miss local curvature features, future versions of `curvr` will adopt more sophisticated curve-fitting procedures from the field of outline-based morphometrics (discussed further in final section). 
 
 
 #### 3. Applications

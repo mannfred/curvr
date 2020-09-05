@@ -95,7 +95,7 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
     stop("functions should not be linear - inputs should be polynomials.")
 
 
-  # convert Momocs OpnCoe objects to t-parameterized
+  # convert Momocs list objects to t-parameterized
   # polynomials for pracma::arclength()
   param_poly <- parameterize(Momocs_poly)
 
@@ -127,10 +127,12 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
 
 
   # The tangents (first derv) of the x_n components, dfun() is defined above
-  # The gradient matrix has elements that are the first deriv of a function
+  # The gradient matrix has elements that are the y value
+  # computed from first deriv of y=f(x)
   gr <- attr(dfun(x), "gradient")
 
-  # The hessian matrix has elements that are the second deriv of a function
+  # The hessian matrix has elements that are the y values
+  # of the second deriv of y=f(x)
   he <- attr(dfun(x), "hessian")[, , "x"]
 
   # has n=subdiv measurements of k

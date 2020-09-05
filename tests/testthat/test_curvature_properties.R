@@ -39,7 +39,7 @@ test_that("curvature is not signed", {
   mdat <- matrix(c(x,y), nrow=10, ncol=2)
   my_poly <- Momocs::npoly(mdat, 2)
 
-  # x^3 from [0,1] and [-1,0] should have equal curvature
+  # x^2 from [0,1] and [-1,0] should have equal curvature
   k1 <- total_curvature(my_poly, c(0, 1), 50)$total_k %>% round(digits = 4)
   k2 <- total_curvature(my_poly, c(-1, 0), 50)$total_k %>% round(digits = 4)
 
@@ -53,7 +53,7 @@ test_that("curvature of unit circle is 1 at every point", {
 # the curvature of the unit circle is 1 at all points
 # (1/r = 1/1 = 1).
 
-# unit circle: 1= x^2 + y^2
+# unit circle: 1^2 = x^2 + y^2
 # visualize:
 # circlefun <- function(x) (1-(x^2))^0.5
 # x <- seq(0, 0.9, by=0.01)
@@ -69,5 +69,33 @@ k <- abs(he)/(1 + gr^2)^(3/2)
 
 expect_equal(k[runif(1, 1, 10000)], 1) #any entry in k should be 1
 expect_equal((sum(k) /10000) *(180/pi), 57.29578) #1 radian
+
+})
+
+
+
+test_that("curvature of circle with radius of 2 is 1/2 at every point", {
+
+
+  # Using the canonical definition of curvature (the inverse radius),
+  # the curvature of the unit circle is 1 at all points
+  # (1/r = 1/1 = 1).
+
+  # unit circle: 1^2 = x^2 + y^2
+  # visualize:
+  # circlefun <- function(x) (1-(x^2))^0.5
+  # x <- seq(0, 0.9, by=0.01)
+  # y <- circlefun(x)
+  # coord <- matrix(c(x, y), nrow=1000, ncol=2)
+  # plot(coord)
+
+  x <- seq(0, 0.9999, by=0.0001)
+  dfun <- deriv3(expression((2^2-(x^2))^0.5), "x", func=TRUE)
+  gr <- attr(dfun(x), "gradient") #computes 1st derivative bw x=0 to x=1
+  he <- attr(dfun(x), "hessian")[ , , "x"] #computes 2nd derivative bw x=0 to x=1
+  k <- abs(he)/(1 + gr^2)^(3/2)
+
+  expect_equal(k[runif(1, 1, 10000)], 1/2) #any entry in k should be 1/2
+  expect_equal((sum(k) /10000) *(180/pi), 57.29578/2) #1/2 radian
 
 })
