@@ -1,0 +1,26 @@
+Call:
+pgls(formula = shapePC1 ~ dors_curv, data = phydata, lambda = "ML")
+
+Residuals:
+      Min        1Q    Median        3Q       Max 
+-0.019324 -0.005732 -0.001177  0.004338  0.019901 
+
+Branch length transformations:
+
+kappa  [Fix]  : 1.000
+lambda [ ML]  : 0.834
+   lower bound : 0.000, p = 0.00020565
+   upper bound : 1.000, p = 0.00031352
+   95.0% CI   : (0.474, 0.965)
+delta  [Fix]  : 1.000
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)   
+(Intercept)  0.2767878  0.0988749  2.7994 0.007637 **
+dors_curv   -0.0029386  0.0010319 -2.8477 0.006728 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.008953 on 43 degrees of freedom
+Multiple R-squared: 0.1587,	Adjusted R-squared: 0.1391 
+F-statistic: 8.109 on 1 and 43 DF,  p-value: 0.006728 
