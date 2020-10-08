@@ -143,6 +143,6 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
   k_total <- (sum(k)/subdiv)
 
   # define output
-  out <- list(k = k, total_k = k_total)
+  out <- list(k = k, total_k = k_total, s = arc)
   return(out)
 }

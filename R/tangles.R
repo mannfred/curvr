@@ -1,5 +1,6 @@
 library(Momocs)
 library(pracma)
+library(tidyverse)
 
 # set up mock LM data
 x <- 1:10
@@ -9,7 +10,7 @@ my_poly <- Momocs::npoly(mdat, 2)
 
 # point-wise K between 1 and 10
 k <-
-  total_curvature(my_poly, c(1, 10), 200)
+  total_curvature(my_poly, c(1, 10), 1000)
 
 # all K values from curvr check out with
 # https://www.wolframalpha.com/input/?i=curvature+of+y%3Dx%5E2+at+x%3D10
@@ -21,20 +22,20 @@ k <-
 param_poly <- parameterize(my_poly)
 
 # seq includes zero, so we get 201 curvature measurements
-iter <- seq(0, 1, by = 1/200)
+iter <- seq(0, 1, by = 1/10000)
 arcfun_list <- list()
 
-arc <- pracma::arclength(param_poly, 1, 10)$length
+arc <- pracma::arclength(param_poly, 0.9999, 10.0001)$length
 
 for (i in seq_along(iter)) {
   arcfun_list[[i]] <- local({
     arc_sub <- iter[i] * arc
     function(u) pracma::arclength(param_poly,
-                                  1, u)$length - arc_sub
+                                  0.9999, u)$length - arc_sub
   })
 }
 
-root_find <- function(x) stats::uniroot(x, c(1,10))$root
+root_find <- function(x) stats::uniroot(x, c(0.9999,10.0001))$root
 
 x_param <- sapply(arcfun_list, root_find)
 
@@ -44,7 +45,7 @@ x_param <- sapply(arcfun_list, root_find)
 polyfun <- function(x) x^2
 x2 <- x_param
 y2 <- polyfun(x2)
-coord <- matrix(c(x2, y2), nrow=201, ncol=2)
+coord <- matrix(c(x2, y2), nrow=10001, ncol=2)
 
 
 tangles_poly <-
@@ -56,6 +57,7 @@ tangles_poly <-
 # -------------------------------------
 # dissecting the tangent angle function
 # methods(coo_angle_tangent)
+# "the tangent angle is equal to the argument of the derivative of the curve"
 
   p <- nrow(coord) # the number of landmarks
 
@@ -87,20 +89,22 @@ tangles_poly <-
   # existing on the complex plane
   # the 'argument' of a complex number is arctan(y/x)
 
-  # tet1 is a string of angles (radians)
+  # tet1 is a string of angles (radians) that are within the range -pi to +pi
   tet1 <-
     Arg(complex(
       real = tangvect[, 1],
-      imaginary = tangvect[, 2]))
+      imaginary = tangvect[, 2])) * (180/pi)
 
   # idea from: https://stackoverflow.com/questions/21698353/difference-between-neighboring-elements-of-a-vector-in-r
   # tet1 without first element *subtract* tet1 without last element
   # therefore, first element is dropped
 
-  phi3 <- (tet1[-1] - tet1[-length(tet1)]) * (180/pi)
+  phi3 <- (tet1[-1] - tet1[-length(tet1)])
 
-  # looks 1:1, but values of phi3 are ~1/2 of k
+  # looks 1:1 when k[1] is removed, but values of phi3 are ~1/2 of k
   plot(k$k[-(c(1,201))], phi3)
+
+
 
 # https://github.com/MomX/Momocs/blob/master/R/core-out-tfourier.R
 
@@ -150,3 +154,63 @@ pryr::show_c_source(.Primitive(Arg(x)))
 # # but tangent angles and K aren't the same..
 # plot(tangles, k$k)
 
+
+# -------------
+# unit circle
+# should be constant...
+
+# parameterized unit circle
+f <- function(x) c(x, (1-(x^2))^0.5)
+
+# arc-length parameterization
+iter <- seq(0, 1, by = 1/1000)
+arcfun_list <- list()
+
+arc <- pracma::arclength(f, 0, 1)$length
+
+for (i in seq_along(iter)) {
+  arcfun_list[[i]] <- local({
+    arc_sub <- iter[i] * arc
+    function(u) pracma::arclength(f,
+                                  1, u)$length - arc_sub
+  })
+}
+
+root_find <- function(x) stats::uniroot(x, c(0, 1))$root
+
+# x-coords
+x_param <- sapply(arcfun_list, root_find)
+
+#y-coords
+y <- (1-(x_param^2))^0.5
+
+# plot unit circle
+plot(x_param, y)
+
+# coordinate matrix
+circlecoord <- matrix(c(x_param,y), ncol =2)
+
+#something weird:
+# plot(diff(circlecoord[,2]))
+# shows that the y values aren't evenly spaced
+# i think this affects curvature calcs?
+
+
+
+tangvect <- circlecoord[-1,] - circlecoord[-nrow(circlecoord),]
+
+tet1 <-
+  Arg(complex(
+    real = tangvect[, 1],
+    imaginary = tangvect[, 2]))
+
+# ??? sum(phi3) gives 3.14???
+phi3 <-
+  (tet1[-1] - tet1[-length(tet1)]) %>%
+  # abs() %>%
+  # magrittr::multiply_by(180/pi)
+
+
+# values are *very* close to 57.29579 which is 1 radian
+# though they are negative...
+# could take abs()
