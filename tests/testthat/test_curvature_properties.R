@@ -67,7 +67,7 @@ gr <- attr(dfun(x), "gradient") #computes 1st derivative bw x=0 to x=1
 he <- attr(dfun(x), "hessian")[ , , "x"] #computes 2nd derivative bw x=0 to x=1
 k <- abs(he)/(1 + gr^2)^(3/2)
 
-expect_equal(k[runif(1, 1, 10000)], 1) #any entry in k should be 1
+expect_equal(k[runif(1, 1, 10000)], 1) #any entry in k should be 1 (1/r = k, for r = 1)
 expect_equal((sum(k) /10000) *(180/pi), 57.29578) #1 radian
 
 })
