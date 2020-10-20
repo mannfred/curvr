@@ -6,7 +6,7 @@ library(tidyverse)
 # curvr approach
 # set up mock LM data
 x1 <- 1:10
-y1<- 0.5*(x1^3.2)-99
+y1<- x1^2
 mdat <- matrix(c(x1,y1), nrow=10, ncol=2)
 my_poly <- Momocs::npoly(mdat, 2)
 
@@ -14,17 +14,20 @@ my_poly <- Momocs::npoly(mdat, 2)
 k <-
   total_curvature(my_poly, c(1, 10), 500)
 
-# convert arc length to radians
-alrad <- k$s * (pi/180)
+# pracma::arclength()
+# computes arclength in radians
+# (this was tested on a unit circle)
 
-alrad * k$total_k
-# 0.4227657
+# multiply by arc length
+# total curvature is expressed in degrees
+k$total_k * k$s
+
 
 # ---------------------
 # tangles approach
 
 x2 <- seq(1, 10, by = (10-1)/length(k$k))
-y2 <- 0.5*(x2^3.2)-99
+y2 <- x2^2
 
 coords <- matrix(c(x2, y2), ncol =2)
 plot(coords)
@@ -38,7 +41,10 @@ tet1 <-
 
 
 phi <-
-  (tet1[-1] - tet1[-length(tet1)])
+  abs(tet1[-1] - tet1[-length(tet1)])
 
-# 0.315728
-sum(phi)
+# convert to degrees
+phideg <- phi * (180/pi)
+
+# integrate; total curvature is expressed in degrees
+sum(phideg)
