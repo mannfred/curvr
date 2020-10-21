@@ -52,3 +52,58 @@ phideg <- phi * (180/pi)
 
 # integrate; total curvature is expressed in degrees
 sum(phideg)
+
+
+
+
+# ------------------
+# Sally's spirals
+
+f <-
+  function(x) {
+  c(
+    sqrt((4/3)*x)*cos((4/3)*x) + 20,
+     sin((4/3)*x) + 20
+    )
+}
+
+# multiply the values by 3/4.91 to scale by arclength (see Sally's notes)
+x3 <- c(0, 0.5, 1, 1.5, 2)
+y3 <- f(x3) * (3/4.91882)
+
+spiral <- matrix(c(y3[1:5], y3[6:10]) , nrow=5, ncol=2)
+plot(spiral)
+
+# find out what params give arc length = 3
+arclength(f, 0, 1.80002)
+
+
+# ------------------
+# now compute curvature between 0 and 1.8
+x4 <- seq(0, 3, by=0.001)
+y4 <- f(x4) * (3/4.91882)
+
+spiral <- matrix(c(y4[1:3001], y4[3002:6002]) , nrow=3001, ncol=2)
+plot(spiral)
+
+
+tangvect <- spiral[-1,] - spiral[-nrow(spiral),]
+
+
+# need to address discontinuity
+tet1 <-
+  Arg(complex(
+    real = tangvect[, 1],
+    imaginary = tangvect[, 2]))
+
+# shift by pi at discontinuity (see Sally's notes)
+tet1[1178:3000] <- c(tet1[1178:3000] + 2*pi)
+
+# remove a weird data point
+tet1 <- tet1[-1178]
+
+phi <-
+  (tet1[-1] - tet1[-length(tet1)])
+
+# agrees with Sally's mathematica result
+sum(phi)
