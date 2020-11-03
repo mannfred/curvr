@@ -75,13 +75,30 @@ spiral <- matrix(c(y3[1:5], y3[6:10]) , nrow=5, ncol=2)
 plot(spiral)
 
 # find out what params give arc length = 3
-arclength(f, 0, 1.80002)
+arclength(f, 0, 3) # gives s = 4.91881
+
 
 
 # ------------------
-# now compute curvature between 0 and 1.8
+# now compute curvature between 0 and 3
+
+
+
+f_scaled <-
+  function(x) {
+    c(
+      (3/4.91882)*(sqrt((4/3)*x)*cos((4/3)*x) + 20),
+      (3/4.91882)*(sin((4/3)*x) + 20)
+    )
+  }
+
+# function has been scaled
+# arc length bw [0,3] is 3
+arclength(f_scaled, 0, 3)
+
 x4 <- seq(0, 3, by=0.001)
-y4 <- f(x4) * (3/4.91882)
+y4 <- f_scaled(x4)
+
 
 spiral <- matrix(c(y4[1:3001], y4[3002:6002]) , nrow=3001, ncol=2)
 plot(spiral)

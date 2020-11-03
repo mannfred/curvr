@@ -137,7 +137,7 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
 
   # has n=subdiv measurements of k
   # convert from rad to degrees
-  k <- (abs(he/(1 + gr^2)^(3/2)))
+  k <- (abs(he)/(1 + gr^2)^(3/2)) * (180/pi)
 
   # add all measurements of k, rescale depending on #of subdivisions
   k_total <- (sum(k)/subdiv)

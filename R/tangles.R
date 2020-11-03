@@ -2,6 +2,7 @@ library(Momocs)
 library(pracma)
 library(tidyverse)
 
+# --------------------------------------
 # set up mock LM data
 x <- 1:10
 y <- x^2
@@ -21,7 +22,17 @@ alrad * k$total_k
 
 # all K values from curvr check out with
 # https://www.wolframalpha.com/input/?i=curvature+of+y%3Dx%5E2+at+x%3D10
+# but what units does Wolfram use?
 
+# testing against Wolfram
+# https://www.wolframalpha.com/widgets/view.jsp?id=477ce31923bd5cc8f9d1d0502062c445
+x <- seq(1, 10, by=0.001)
+dfun <- deriv3(expression(x^2), "x", func=TRUE)
+gr <- attr(dfun(x), "gradient") #computes 1st derivative bw x=0 to x=1
+he <- attr(dfun(x), "hessian")[ , , "x"] #computes 2nd derivative bw x=0 to x=1
+k <- abs(he)/(1 + gr^2)^(3/2)
+
+# k agrees with wolfram for x=1 and x=10
 
 # ------------------------------------
 # get arc length parameterization of x
@@ -44,6 +55,7 @@ for (i in seq_along(iter)) {
 root_find <- function(x) stats::uniroot(x, c(1, 10))$root
 
 x_param <- sapply(arcfun_list, root_find)
+
 
 # -----------------------------------
 # get y values for s-param'd x values
@@ -123,7 +135,7 @@ tangles_poly <-
 
 # -------------
 # unit circle
-# should be constant...
+# K should be constant...
 
 # parameterized unit circle
 f <- function(x) c(x, (1-(x^2))^0.5)
@@ -147,14 +159,16 @@ root_find <- function(x) stats::uniroot(x, c(0, 0.9999))$root
 # x-coords
 x_param <- sapply(arcfun_list, root_find)
 
+# x-coords (not param'd)
+x <- seq(0, sqrt(2)/2, by =0.0001)
 #y-coords
-y <- (1-(x_param^2))^0.5
+y <- (1-(x^2))^0.5
 
 # plot unit circle
-plot(x_param, y)
+plot(x, y)
 
 # coordinate matrix
-circlecoord <- matrix(c(x_param,y), ncol =2)
+circlecoord <- matrix(c(x,y), ncol =2)
 
 # oddly, the first two rows have the same values..
 circlecoord <- circlecoord[-1,]
@@ -175,7 +189,7 @@ tet1 <-
 
 # ??? sum(phi3) gives 3.14???
 phi3 <-
-  (tet1[-1] - tet1[-length(tet1)]) %>%
+  (tet1[-1] - tet1[-length(tet1)])
   # abs() %>%
   # magrittr::multiply_by(180/pi)
 
@@ -183,3 +197,11 @@ phi3 <-
 # values are *very* close to 57.29579 which is 1 radian
 # though they are negative...
 # could take abs()
+
+# ------------------------
+# compare unit circle result
+# with total_curvature()
+
+circle_poly <- Momocs::npoly(circlecoord, 2)
+
+total_curvature(f, c(0,1), 500)

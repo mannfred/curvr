@@ -61,11 +61,33 @@ test_that("curvature of unit circle is 1 at every point", {
 # coord <- matrix(c(x, y), nrow=1000, ncol=2)
 # plot(coord)
 
-x <- seq(0, 0.9999, by=0.0001)
-dfun <- deriv3(expression((1-(x^2))^0.5), "x", func=TRUE)
+x <- seq(0, sqrt(2)/2, by=0.0001)
+dfun <- deriv3(expression(sqrt(1-x^2)), "x", func=TRUE)
 gr <- attr(dfun(x), "gradient") #computes 1st derivative bw x=0 to x=1
 he <- attr(dfun(x), "hessian")[ , , "x"] #computes 2nd derivative bw x=0 to x=1
 k <- abs(he)/(1 + gr^2)^(3/2)
+sum(k)/7072
+
+# now compute K_tot
+f3 <- function(x) {
+
+  f1 <- Deriv::Deriv(function(x) sqrt(1-x^2))
+  f2 <- Deriv::Deriv(f1)
+  abs(f2(x)) / (1 + (f1(x)^2))^1.5
+}
+
+# f3(x) always gives 1
+
+# K_tot
+# the function is parameterized by arclength,
+# ie integrate(f3, 0, pi/4) finds the integral
+# between arclength = 0 and arclength = pi/4
+# NOT x = 0 and x = pi/4
+integrate(f3, 0, pi/4)
+
+
+
+
 
 expect_equal(k[runif(1, 1, 10000)], 1) #any entry in k should be 1 (1/r = k, for r = 1)
 expect_equal((sum(k) /10000) *(180/pi), 57.29578) #1 radian
