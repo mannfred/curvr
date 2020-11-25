@@ -22,9 +22,8 @@ k <-
 # computes arclength in radians
 # (this was tested on a unit circle)
 
-# multiply by arc length
-# total curvature is expressed in degrees
-k$total_k * (180/pi) * k$s
+
+k$total_k
 
 
 # ---------------------
@@ -59,6 +58,7 @@ sum(phideg)
 # ------------------
 # Sally's spirals
 
+# I added 20 to shift it into the positive xy space
 f <-
   function(x) {
   c(
@@ -67,7 +67,7 @@ f <-
     )
 }
 
-# multiply the values by 3/4.91 to scale by arclength (see Sally's notes)
+# multiply the y values by 3/4.91 to scale by arclength (see Sally's notes)
 x3 <- c(0, 0.5, 1, 1.5, 2)
 y3 <- f(x3) * (3/4.91882)
 
@@ -107,7 +107,7 @@ plot(spiral)
 tangvect <- spiral[-1,] - spiral[-nrow(spiral),]
 
 
-# need to address discontinuity
+# need to address discontinuity at i=1178
 tet1 <-
   Arg(complex(
     real = tangvect[, 1],

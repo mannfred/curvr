@@ -71,14 +71,14 @@ as_expression <- function(poly, expr = TRUE) {
 #' library(Momocs)
 #' library(pracma)
 #'
-#' x <- 1:10
-#' y <- x^2
-#'
-#' # a fictional landmark dataset
-#' mdat <- matrix(c(x,y), nrow=10, ncol=2)
-#'
-#' # fit a second-order polynomial to the landmarks
-#' my_poly <- Momocs::npoly(mdat, 2)
+# x <- 1:10
+# y <- x^2
+#
+# # a fictional landmark dataset
+# mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#
+# # fit a second-order polynomial to the landmarks
+# my_poly <- Momocs::npoly(mdat, 2)
 #'
 #' # parameterize by t
 #' paramd_poly <- parameterize(my_poly)

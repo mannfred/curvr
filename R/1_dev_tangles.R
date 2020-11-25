@@ -48,11 +48,11 @@ arc <- pracma::arclength(param_poly, 1, 10)$length
 for (i in seq_along(iter)) {
   arcfun_list[[i]] <- local({
     arc_sub <- iter[i] * arc
-    function(u) pracma::arclength(param_poly, 1, u)$length - arc_sub
+    function(u) pracma::arclength(circlefun, 0, u)$length - arc_sub
   })
 }
 
-root_find <- function(x) stats::uniroot(x, c(1, 10))$root
+root_find <- function(x) stats::uniroot(x, c(0, sqrt(3)/2))$root
 
 x_param <- sapply(arcfun_list, root_find)
 

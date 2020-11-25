@@ -59,7 +59,7 @@
 
 
 
-total_curvature <- function(Momocs_poly, x_range, subdiv) {
+total_curvature <- function(Momocs_poly, x_range, subdiv, param = FALSE) {
 
   # is.atomic checks that x_range cannot be a list or
   # expression
@@ -95,6 +95,11 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
     stop("functions should not be linear - inputs should be polynomials.")
 
 
+  # function runs faster if not parameterized by arclength
+  if (param == FALSE) {
+    x <- seq(from = x_range[1], to = x_range[2], by = abs(x_range[2] - x_range[1])/subdiv)
+  } else {
+
   # convert Momocs list objects to t-parameterized
   # polynomials for pracma::arclength()
   param_poly <- parameterize(Momocs_poly)
@@ -125,7 +130,7 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
   # parameterize polynomial function by arc length
   x <- sapply(arcfun_list, root_find)
 
-
+}
   # The tangents (first derv) of the x_n components, dfun() is defined above
   # The gradient matrix has elements that are the y value
   # computed from first deriv of y=f(x)
@@ -137,12 +142,21 @@ total_curvature <- function(Momocs_poly, x_range, subdiv) {
 
   # has n=subdiv measurements of k
   # convert from rad to degrees
-  k <- (abs(he)/(1 + gr^2)^(3/2)) * (180/pi)
+  k <- (abs(he)/(1 + gr^2)^(3/2))
 
   # add all measurements of k, rescale depending on #of subdivisions
-  k_total <- (sum(k)/subdiv)
+  f0 <- as_function(Momocs_poly)
+
+  k_fun <- function(x) {
+
+      f1 <- Deriv::Deriv(f0)
+      f2 <- Deriv::Deriv(f1)
+      ((f2(x)) / ((1 + (f1(x)^2))^1.5)) *
+        (sqrt(1+(f1(x))^2))
+  }
+
+  k_total <- integrate(k_fun, lower = x_range[1], upper = x_range[2])$value
 
   # define output
-  out <- list(k = k, total_k = k_total, s = arc)
-  return(out)
+  return(k_total)
 }
