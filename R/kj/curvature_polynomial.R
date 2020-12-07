@@ -40,7 +40,7 @@ int <- integrate(k_fun, lower = 0, upper = 78)
 # estimate tangent angles along y=x^2
 
 # create matrix of coordinates
-x2 <- seq(0, 78, by = 0.001) # but maybe it should be x2 <- seq(0, al, by = 0.001) ?
+x2 <- seq(1, 10, by = 0.001) # but maybe it should be x2 <- seq(0, al, by = 0.001) ?
 y2 <- x2^2
 
 coords <- matrix(c(x2, y2), ncol =2)

@@ -12,7 +12,7 @@
 #' \code{Momocs:::opoly.default()}. This function cannot yet
 #' handle \code{OpnCoe} objects created by e.g. \code{Momocs:::npoly.Opn()}.
 #'
-#' @param x_range the lower and upper x-values bounds to
+#' @param x_range the lower and upper x-value bounds to
 #' calculate curvature. These are named 'baselines'
 #' in \code{Momocs} polynomial objects.
 #'
@@ -24,7 +24,7 @@
 #'
 #' @return a list. The first element contains point-wise curvature. Units are
 #' degrees per unit length. These values are useful for inspecting local
-#' curvature features. The second element is total curvature. Units are degrees.
+#' curvature features. The second element is total curvature. Units are radians.
 #' Since arclength (ie specimen size) does not affect
 #' the number of times point-wise curvature is computed (see \code{subdiv}),
 #' there is no need to divide total curvature by arclength to adjust for specimen size.
@@ -59,7 +59,7 @@
 
 
 
-total_curvature <- function(Momocs_poly, x_range, subdiv, param = FALSE) {
+total_curvature <- function(Momocs_poly, x_range, subdiv = 1000, param = FALSE) {
 
   # is.atomic checks that x_range cannot be a list or
   # expression
