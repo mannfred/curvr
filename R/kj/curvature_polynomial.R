@@ -28,14 +28,10 @@ polyfun <- function(t) c(t, t^2)
 al <- pracma::arclength(polyfun, 1, 10)$length
 
 
-# for every section (i) of arclength (al/length), multiply
-# that piece with its corresponding curvature (k_i)
-# total curvature = 1.155
-(al / (length(x)-1)) * sum(k)
 
 k_fun <- function(x) 2/((1+(4*(x^2)))^1.5) * (sqrt(1+(4*(x^2))))
 
-int <- integrate(k_fun, lower = 0, upper = 78)
+int <- integrate(k_fun, lower = 1, upper = 10)
 # -----------------------------------------
 # estimate tangent angles along y=x^2
 
@@ -63,4 +59,16 @@ phi <-
 sum(phi)
 
 
+# -------------------
+# scaling doesn't affect curvature
+x <- seq(0.5, 5, by = 0.5)
+y <- 2*(x^2)
+
+# a fictional landmark dataset
+mdat <- matrix(c(x,y), nrow=10, ncol=2)
+
+# fit second-order polynomial to landmarks
+my_poly <- Momocs::npoly(mdat, 2)
+
+total_curvature(my_poly, c(0.5,5), 500)
 

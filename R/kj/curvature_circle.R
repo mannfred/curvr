@@ -36,8 +36,8 @@ al <- arclength(circlefun, 0, sqrt(3)/2)$length
 # estimate tangent angles along unit circle
 
 # create matrix of coordinates
-x2 <- seq(0, sqrt(3)/2, by = 0.001)
-y2 <- sqrt(1-(x2^2))
+x2 <- seq(0, 3, by = 0.0001)
+y2 <- sqrt(3-(x2^2))
 
 coords <- matrix(c(x2, y2), ncol =2)
 
@@ -56,9 +56,9 @@ phi <-
 
 
 # arclength
-circlefun <- function(t) c(t, sqrt(1-(t^2)))
-arc <- arclength(circlefun, 0, sqrt(3)/2)$length
+circlefun <- function(t) c(t, sqrt(3-(t^2)))
+arc <- arclength(circlefun, 0, 3)$length
 
 # total curvature = pi/3
-sum(phi)
+sum(phi, na.rm=TRUE)
 
