@@ -22,5 +22,5 @@ Suggests:
     Momit (>= 0.1.0),
     rmarkdown (>= 2.1),
     testthat (>= 2.3.2)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr

@@ -3,24 +3,25 @@
 \docType{package}
 \name{curvr}
 \alias{curvr}
-\title{curvr: Calculate Point-Wise Curvature From Polynomials}
+\title{curvr: Calculate Point-Wise Curvature From Landmarked Specimens}
 \description{
-Calculate point-wise curvature from polynomial functions
-fitted to landmarked specimens. \code{curvr} is designed
-to pipe from \code{Momocs}, where you can fit polynomial functions
-to landmark data.
+Calculate point-wise curvature from
+landmarked specimens that have been fitted by polynomials in Momocs.
+Polynomials are parameterized by arc length to ensure even sampling
+intervals across the curve. Point-wise curvature is summed
+across the polynomial, outputting 'total curvature'.
 }
 \section{curvr functions}{
 
 The main function of \code{curvr} is \code{total_curvature()} - it calculates point-wise
-curvature along bounded polynomials fitted to curved specimens (e.g. cells, bird bills).
+curvature along bounded polynomials fitted to curved specimens (e.g. corolla tubes, bird bills).
 
-Calculating point-wise curvature, K, involves parameterizing your polynomial function
-by arclength and computing point-wise derivatives. The helper function \code{parameterize()} converts
-polynomial objects from \code{Momocs} into t-parameterized polynomials readable by
-\code{pracma::arclength()}. \code{as_function()} computes the y coordinates
-of our polynomial once the x-coordinates of the arclength-parameterized function
-are known. \code{as_expression()} converts a \code{Momocs} polynomial to an expression
-so that derivatives can be computed using \code{stats::deriv3()}.
+Calculating point-wise curvature, K, involves parameterizing the fitted polynomial function
+by arclength and computing the tangent directions along the curve. The helper function
+\code{parameterize()} converts polynomial objects from \code{Momocs} into t-parameterized
+polynomials readable by \code{pracma::arclength()}. \code{as_function()} computes the
+y coordinates of our polynomial once the x-coordinates of the arclength-parameterized
+function are known. \code{as_expression()} converts a \code{Momocs} polynomial to an
+expression so that derivatives can be computed using \code{stats::deriv3()}.
 }
 

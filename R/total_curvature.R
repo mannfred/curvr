@@ -147,14 +147,16 @@ total_curvature <- function(Momocs_poly, x_range, subdiv = 1000, param = FALSE) 
   # add all measurements of k, rescale depending on #of subdivisions
   f0 <- as_function(Momocs_poly)
 
+  # define function K * ds
   k_fun <- function(x) {
 
       f1 <- Deriv::Deriv(f0)
       f2 <- Deriv::Deriv(f1)
-      ((f2(x)) / ((1 + (f1(x)^2))^1.5)) *
-        (sqrt(1+(f1(x))^2))
+      ((f2(x)) / ((1 + (f1(x)^2))^1.5)) * # K
+        (sqrt(1+(f1(x))^2)) # ds
   }
 
+  # line integral
   k_total <- integrate(k_fun, lower = x_range[1], upper = x_range[2])$value
 
   # define output

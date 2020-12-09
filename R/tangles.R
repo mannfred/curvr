@@ -17,12 +17,14 @@
 #'
 #' @return a numeric vector length 1 indicating the total curvature in radians.
 #'
+#' @examples
 #'
+#' @importFrom dplyr %>%
 #'
-#'
-#'
-#'
-#'
+#' @export
+
+total_tangles <- function(coo_landmarks, interpolation = 500) {
+
 # create matrix of coordinates
 x2 <- seq(1, 10, by = 0.001) # but maybe it should be x2 <- seq(0, al, by = 0.001) ?
 y2 <- x2^2
@@ -45,3 +47,5 @@ phi <-
 
 # total curvature = 0.413
 sum(phi)
+
+}
