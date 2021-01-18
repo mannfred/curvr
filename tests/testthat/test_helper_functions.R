@@ -4,7 +4,7 @@ context("Converting and formatting functions")
 test_that("as_expression() creates expressions", {
   x <- 1:10
   y <- x^2
-  mdat <- matrix(c(x,y), nrow=10, ncol=2)
+  mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
   my_poly <- Momocs::npoly(mdat, 2)
   expect_equal(eval(as_expression(my_poly)), eval(expression(x^2)))
 })
@@ -13,19 +13,21 @@ test_that("as_expression() creates expressions", {
 test_that("parameterize() parameterizes a Momocs polynomial", {
   x <- 1:10
   y <- x^2
-  mdat <- matrix(c(x,y), nrow=10, ncol=2)
+  mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
   my_poly1 <- Momocs::npoly(mdat, 2)
 
-  my_poly2 <- list(c(0,0,1)) #numeric vector of coeffs for y= 0 + 0x^1 +1x^2
-  expect_equal(pracma::arclength(parameterize(my_poly1), 0, 1),
-               pracma::arclength(parameterize(my_poly2), 0, 1))
+  my_poly2 <- list(c(0, 0, 1)) # numeric vector of coeffs for y= 0 + 0x^1 +1x^2
+  expect_equal(
+    pracma::arclength(parameterize(my_poly1), 0, 1),
+    pracma::arclength(parameterize(my_poly2), 0, 1)
+  )
 })
 
 
 test_that("as_function() creates functions", {
   x <- 1:10
   y <- x^2
-  mdat <- matrix(c(x,y), nrow=10, ncol=2)
+  mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
   my_poly <- Momocs::npoly(mdat, 2)
   my_func1 <- as_function(my_poly)
 

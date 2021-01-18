@@ -1,14 +1,12 @@
 Package: curvr
 Type: Package
-Title: Calculate Point-Wise Curvature From Landmarked Specimens
-Version: 0.1.0
+Title: Calculate Total Curvature From Landmarked Specimens
+Version: 0.1.1
 Authors@R: person("Mannfred Masahiro Asada", "Boehm", email = "mannfred.boehm@ubc.ca", 
   role = c("aut", "cre"))
-Description: Calculate point-wise curvature from 
-    landmarked specimens that have been fitted by polynomials in Momocs.
-     Polynomials are parameterized by arc length to ensure even sampling
-    intervals across the curve. Point-wise curvature is summed 
-    across the polynomial, outputting 'total curvature'.
+Description: Calculates total curvature from specimens
+    landmarked in Momocs. Total curvature can be calculated from 
+    fitted polynomials, smoothing splines, or from the tangent angle function. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

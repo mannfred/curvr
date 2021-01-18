@@ -3,6 +3,3 @@ library(curvr)
 library(Momocs)
 
 test_check("curvr")
-
-
-

@@ -23,13 +23,20 @@ polynomials readable by \code{pracma::arclength()}.
 library(Momocs)
 library(pracma)
 
+# x <- 1:10
+# y <- x^2
+#
+# # a fictional landmark dataset
+# mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#
+# # fit a second-order polynomial to the landmarks
+# my_poly <- Momocs::npoly(mdat, 2)
 
 # parameterize by t
 paramd_poly <- parameterize(my_poly)
 
 # calculate arc length between x=0 and x=1
 pracma::arclength(paramd_poly, 0, 1)
-
 }
 \seealso{
 \code{\link{as_expression}} for converting Momocs polynomials to expressions

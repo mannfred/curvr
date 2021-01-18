@@ -19,7 +19,7 @@
 #' y <- x^2
 #'
 #' # a fictional landmark dataset
-#' mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#' mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
 #'
 #' # fit a second-order polynomial to landmarks
 #' my_poly <- Momocs::npoly(mdat, 2)
@@ -29,11 +29,10 @@
 #'
 #' # compute 1st (gradient) and 2nd (Hessian) derivatives
 #' stats::deriv3(poly_express, "x")
-#'
 #' @seealso \code{\link{parameterize}} for t-parameterizing Momocs polynomials
 #' and \code{\link{as_function}} for creating R functions.
 #'
-#' @export
+#'
 
 
 # as_expression()
@@ -43,15 +42,18 @@
 
 as_expression <- function(poly, expr = TRUE) {
 
-    # extract coefficients from npoly list
-    coeffs <- poly[[1]]
-    stringexpr <- paste("x", seq_along(coeffs) - 1,
-                        sep = " ^ ")
-    stringexpr <- paste(stringexpr, coeffs, sep = " * ")
-    stringexpr <- paste(stringexpr, collapse = " + ")
-    if (expr)
-        return(parse(text = stringexpr)) else return(stringexpr)
-
+  # extract coefficients from npoly list
+  coeffs <- poly[[1]]
+  stringexpr <- paste("x", seq_along(coeffs) - 1,
+    sep = " ^ "
+  )
+  stringexpr <- paste(stringexpr, coeffs, sep = " * ")
+  stringexpr <- paste(stringexpr, collapse = " + ")
+  if (expr) {
+    return(parse(text = stringexpr))
+  } else {
+    return(stringexpr)
+  }
 }
 
 
@@ -71,46 +73,48 @@ as_expression <- function(poly, expr = TRUE) {
 #' library(Momocs)
 #' library(pracma)
 #'
-# x <- 1:10
-# y <- x^2
-#
-# # a fictional landmark dataset
-# mdat <- matrix(c(x,y), nrow=10, ncol=2)
-#
-# # fit a second-order polynomial to the landmarks
-# my_poly <- Momocs::npoly(mdat, 2)
+#' # x <- 1:10
+#' # y <- x^2
+#' #
+#' # # a fictional landmark dataset
+#' # mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#' #
+#' # # fit a second-order polynomial to the landmarks
+#' # my_poly <- Momocs::npoly(mdat, 2)
 #'
 #' # parameterize by t
 #' paramd_poly <- parameterize(my_poly)
 #'
 #' # calculate arc length between x=0 and x=1
 #' pracma::arclength(paramd_poly, 0, 1)
-#'
 #' @seealso \code{\link{as_expression}} for converting Momocs polynomials to expressions
 #' and \code{\link{as_function}} for creating R functions.
 #'
-#' @export
+#'
 
 # parameterize()
 
 
 parameterize <- function(poly) {
 
-    #extract coefficients from npoly list
-    coeffs <- poly[[1]]
-    stringchar <- paste("x", seq_along(coeffs) - 1,
-                        sep = " ^ ")
-    stringchar <- paste(stringchar, coeffs, sep = " * ")
-    stringchar <- paste(stringchar, collapse = " + ")
-    paramchar <- paste("x", stringchar, sep = " , ")
-    bodychar <- paste0("c(", paramchar, ")")  #add 'c()'
+  # extract coefficients from npoly list
+  coeffs <- poly[[1]]
+  stringchar <- paste("x", seq_along(coeffs) - 1,
+    sep = " ^ "
+  )
+  stringchar <- paste(stringchar, coeffs, sep = " * ")
+  stringchar <- paste(stringchar, collapse = " + ")
+  paramchar <- paste("x", stringchar, sep = " , ")
+  bodychar <- paste0("c(", paramchar, ")") # add 'c()'
 
-    bodyexp <- eval(parse(text = paste("alist(", bodychar,
-                                       ")")))
+  bodyexp <- eval(parse(text = paste(
+    "alist(", bodychar,
+    ")"
+  )))
 
-    f <- function(x) NULL
-    body(f) <- bodyexp[[1]]
-    f
+  f <- function(x) NULL
+  body(f) <- bodyexp[[1]]
+  f
 }
 
 
@@ -127,7 +131,7 @@ parameterize <- function(poly) {
 #'
 #'
 #'
-#'@examples
+#' @examples
 #'
 #' # solve for y values for arc-length parameterized curve
 #'
@@ -137,7 +141,7 @@ parameterize <- function(poly) {
 #' y <- x^2
 #'
 #' # a fictional landmark dataset
-#' mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#' mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
 #'
 #' # fit a second-order polynomial to landmarks
 #' my_poly <- Momocs::npoly(mdat, 2)
@@ -145,26 +149,26 @@ parameterize <- function(poly) {
 #' paramd_poly <- parameterize(my_poly)
 #'
 #' subdiv <- 100 # number of times to subdivide the curve
-#' iter <- seq(0, 1, by = 1/subdiv)
-#' arcfun_list<- list() # empty bin
+#' iter <- seq(0, 1, by = 1 / subdiv)
+#' arcfun_list <- list() # empty bin
 #'
 #' # arc length of t-parameterized function between x = [0, 1]
-#' x_range <- c(0,1)
+#' x_range <- c(0, 1)
 #' b <- pracma::arclength(paramd_poly, x_range[1], x_range[2])$length
 #'
 #' # for every fraction of arclength, b*i, create a function(u) with an unknown
 #' # x-coordinate, u. Solve for u by uniroot().
-#' for(i in seq_along(iter)){
-#'    arcfun_list[[i]] <-
-#'        local({
-#'            b_sub<-iter[i]*b
-#'            function(u) pracma::arclength(paramd_poly, x_range[1], u)$length - b_sub
-#'        })
-#'}
-
+#' for (i in seq_along(iter)) {
+#'   arcfun_list[[i]] <-
+#'     local({
+#'       b_sub <- iter[i] * b
+#'       function(u) pracma::arclength(paramd_poly, x_range[1], u)$length - b_sub
+#'     })
+#' }
+#'
 #' # root-finding function
 #' root_find <- function(x) uniroot(x, x_range)$root
-
+#'
 #' # parameterize polynomial function by arc length
 #' x <- sapply(arcfun_list, root_find)
 #'
@@ -172,29 +176,29 @@ parameterize <- function(poly) {
 #' func_poly <- as_function(my_poly)
 #'
 #' y <- func_poly(x)
-#'
 #' @seealso \code{\link{as_expression}} for converting Momocs polynomials to expressions
 #'
 #'
-#' @export
+#'
 
 # as_function()
 
 as_function <- function(poly) {
 
-    # extract coefficients from npoly list
-    coeffs <- poly[[1]]
-    stringexpr <- paste("x", seq_along(coeffs) - 1,
-                        sep = " ^ ")
-    stringexpr <- paste(stringexpr, coeffs, sep = " * ")
-    stringexpr <- paste(stringexpr, collapse = " + ")
+  # extract coefficients from npoly list
+  coeffs <- poly[[1]]
+  stringexpr <- paste("x", seq_along(coeffs) - 1,
+    sep = " ^ "
+  )
+  stringexpr <- paste(stringexpr, coeffs, sep = " * ")
+  stringexpr <- paste(stringexpr, collapse = " + ")
 
-    bodyexp <- eval(parse(text = paste("alist(", stringexpr,
-                                       ")")))  # function body
-    args <- alist(x = )  # variable names
+  bodyexp <- eval(parse(text = paste(
+    "alist(", stringexpr,
+    ")"
+  ))) # function body
+  args <- alist(x = ) # variable names
 
-    f <- as.function(c(args, bodyexp), env = parent.frame())
-    f
+  f <- as.function(c(args, bodyexp), env = parent.frame())
+  f
 }
-
-

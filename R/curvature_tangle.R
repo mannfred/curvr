@@ -23,29 +23,29 @@
 #'
 #' @export
 
-total_tangles <- function(coo_landmarks, interpolation = 500) {
+curvature_tangle <- function(coo_landmarks, interpolation = 500) {
 
-# create matrix of coordinates
-x2 <- seq(1, 10, by = 0.001) # but maybe it should be x2 <- seq(0, al, by = 0.001) ?
-y2 <- x2^2
+  # create matrix of coordinates
+  x2 <- seq(1, 10, by = 0.001)
+  y2 <- x2^2
 
-coords <- matrix(c(x2, y2), ncol =2)
+  coords <- matrix(c(x2, y2), ncol = 2)
 
-# calculate tangent vector between adjacent coordinates
-tangvect <- coords[-1,] - coords[-nrow(coords),]
+  # calculate tangent vector between adjacent coordinates
+  tangvect <- coords[-1, ] - coords[-nrow(coords), ]
 
-# using Arg() to calculate the angle (arguement) between tangent vectors
-tet1 <-
-  Arg(complex(
-    real = tangvect[, 1],
-    imaginary = tangvect[, 2]))
+  # using Arg() to calculate the angle (arguement) between tangent vectors
+  tet1 <-
+    Arg(complex(
+      real = tangvect[, 1],
+      imaginary = tangvect[, 2]
+    ))
 
-# calculate the change in angle between coordinates
-phi <-
-  abs(tet1[-1] - tet1[-length(tet1)])
+  # calculate the change in angle between coordinates
+  phi <-
+    abs(tet1[-1] - tet1[-length(tet1)])
 
 
-# total curvature = 0.413
-sum(phi)
-
+  # total curvature = 0.413
+  sum(phi)
 }

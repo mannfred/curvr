@@ -27,7 +27,7 @@ x <- 1:10
 y <- x^2
 
 # a fictional landmark dataset
-mdat <- matrix(c(x,y), nrow=10, ncol=2)
+mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
 
 # fit a second-order polynomial to landmarks
 my_poly <- Momocs::npoly(mdat, 2)
@@ -35,24 +35,26 @@ my_poly <- Momocs::npoly(mdat, 2)
 paramd_poly <- parameterize(my_poly)
 
 subdiv <- 100 # number of times to subdivide the curve
-iter <- seq(0, 1, by = 1/subdiv)
-arcfun_list<- list() # empty bin
+iter <- seq(0, 1, by = 1 / subdiv)
+arcfun_list <- list() # empty bin
 
 # arc length of t-parameterized function between x = [0, 1]
-x_range <- c(0,1)
+x_range <- c(0, 1)
 b <- pracma::arclength(paramd_poly, x_range[1], x_range[2])$length
 
 # for every fraction of arclength, b*i, create a function(u) with an unknown
 # x-coordinate, u. Solve for u by uniroot().
-for(i in seq_along(iter)){
-   arcfun_list[[i]] <-
-       local({
-           b_sub<-iter[i]*b
-           function(u) pracma::arclength(paramd_poly, x_range[1], u)$length - b_sub
-       })
+for (i in seq_along(iter)) {
+  arcfun_list[[i]] <-
+    local({
+      b_sub <- iter[i] * b
+      function(u) pracma::arclength(paramd_poly, x_range[1], u)$length - b_sub
+    })
 }
+
 # root-finding function
 root_find <- function(x) uniroot(x, x_range)$root
+
 # parameterize polynomial function by arc length
 x <- sapply(arcfun_list, root_find)
 
@@ -60,7 +62,6 @@ x <- sapply(arcfun_list, root_find)
 func_poly <- as_function(my_poly)
 
 y <- func_poly(x)
-
 }
 \seealso{
 \code{\link{as_expression}} for converting Momocs polynomials to expressions

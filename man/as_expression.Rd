@@ -28,7 +28,7 @@ x <- 1:10
 y <- x^2
 
 # a fictional landmark dataset
-mdat <- matrix(c(x,y), nrow=10, ncol=2)
+mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
 
 # fit a second-order polynomial to landmarks
 my_poly <- Momocs::npoly(mdat, 2)
@@ -38,7 +38,6 @@ poly_express <- as_expression(my_poly)
 
 # compute 1st (gradient) and 2nd (Hessian) derivatives
 stats::deriv3(poly_express, "x")
-
 }
 \seealso{
 \code{\link{parameterize}} for t-parameterizing Momocs polynomials
