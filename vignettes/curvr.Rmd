@@ -71,27 +71,20 @@ Inspection of deformation grids [@bookstein_1991] or end-member specimens [@macl
 
 Computing total curvature necessitates fitting a curve to the specimen of interest. Fortunately, the landmarks used in a GM protocol can be re-purposed for regressing curves to the specimen. However, in GM, landmarks are placed throughout the entire specimen to quantify shape. Quantifying curvature typically implies a segment of the shape that is of particular interest [but see: @silk_1978], therefore the landmarks used for curvature analysis will be a subset of those used in the GM protocol. 
 
-The `curvr` package can be used alongside a typical GM protocol where specimens have been digitally landmarked using e.g. tpsDig [@rohlf_2015], `Momocs` [@bonhomme_2014], or `geomorph` [@adams_2013]. For relatively simple shapes, landmarked specimens with $xy$ coordinates can be fitted with polynomial curves using `Momocs::npoly.Opn()` or `Momocs::opoly.Opn()`. The output of either function is a list-object with the first element containing the polynomial coefficients in ascending order of degrees (note that `Momocs::npoly.default()` creates an `OpnCoe` object - currently, `curvr` is not designed to handle this object class). `curvr::curvature_poly()` takes the polynomial `list` object(s) as input, extracts the coefficients and constructs a function that is passed to `Deriv::Deriv()` for computing first and second derivatives. A function for point-wise curvature $\kappa_i$ is then constructed as:
+The `curvr` package can be used alongside a typical GM protocol where specimens have been digitally landmarked using e.g. tpsDig [@rohlf_2015], `Momocs` [@bonhomme_2014], or `geomorph` [@adams_2013]. For relatively simple shapes, landmarked specimens with $xy$ coordinates can be fitted with polynomial curves using `Momocs::npoly.Opn()` or `Momocs::opoly.Opn()`. The output of either function is a list-object with the first element containing the polynomial coefficients in ascending order of degrees. Note that `Momocs::npoly.default()` creates an `OpnCoe` object - currently, `curvr` is not designed to handle this object class. `curvr::curvature_poly()` takes the polynomial `list` object(s) as input, extracts the coefficients and constructs a function that is passed to `Deriv::Deriv()` for computing first and second derivatives. A function for point-wise curvature $\kappa_i$ is then constructed as:
 
 $$\kappa_i = \frac{\lvert{y_i''}\rvert} {(1 + y_i'^2)^{3/2}}$$
-Which is the curvature of a graph of a function (non-vectorized) CITE.
+Which is curvature at $x=i$ for a single-valued function $y=f(x)$ [@huber_2008; @rutter_2000, pp. 133-139]. The arc-length segment $ds_i$ is simply:
 
-Before point-wise curvature is estimated from the derivatives, the polynomial function is parameterized by arc length. The advantage of this step is that curvature can be calculated at even increments of arc length, $s$. The polynomial is parameterized by arc length by first splitting the curve into sub-curves of incrementally increasing proportions of total length, from 0 to 1. For example, a curve split into 10 parts would have 10 sub-curves with arc length calculated as $0.1(s)$, $0.2(s)$, ..., $1.0(s)$. Each sub-curve has a lower $x$ bound of known value (the lower bound of the original polynomial). The upper $x$ bound (of each sub-surve) is unknown. The root-finding function `stats::uniroot` solves for the unknown upper $x_i$ value, $u_i$, for each $i$ sub-curve:
+$$ds_i = \sqrt{1^2 + {y'_i}^2}$$
 
-```f(u) = pracma::arclength(polynomial, lower x boundary, u)$length```
+These two equations are assigned to functions using the outputs from `Deriv::Deriv()`, and passed to `stats::integrate()` to calculate total curvature. 
 
-The result is a vector of $x$ values that correspond to even increments of arc length along the polynomial. We then use the gradient (first derivatives, $y'$) and Hessian matricies (second derivatives, $y''$) to calculate point-wise $\kappa_i$ at every position $x_i$:
+Before submitting `Momocs` polynomials to `curvr`, the user first needs to inspect their list-object and extract the lower and upper $x$ bounds of their polynomial. These bounds are entered as the `x_range` parameter of `curvr::curvature_poly()`. Additionally, the user needs to specify the number of subdivisions made to their curve(s). Greater subdivisions means curvature is sampled more times the curve. 
 
-$$\kappa = \frac{|y''|}{(1+y'^2)^{\frac{3}{2}}}$$ 
+For a more complex curve, landmarks may be better fitted by a smoothing spline [@wood_2017]. Unlike the above, `curvr::curvature_spline()` accepts raw landmark data as a `matrix` instead of fitted curves. This function uses `stats::smooth.spline()` to fit a cubic smoothing spline to the landmark `matrix`. Derivatives are computed from the `smooth.spline` class object and assigned to functions using `stats::splinefun()`. Total curvature is computed using the same approach as above. 
 
-
-Although written differently than the equation for curvature stated in the introduction, this definition is equivalent [@rutter_2000, pp. 133-139]. 
-
-Finally, the point-wise curvature measurements are summed and converted from radians to degrees. The output of `curvr::total_curvature()` is a `list` containing point-wise and  total curvature as defined above. 
-
-Before submitting `Momocs` polynomials to `curvr`, the user first needs to inspect their list-object and extract the lower and upper $x$ bounds of their polynomial (coming soon to Vignettes). These bounds are entered as the `x_range` parameter of `curvr::total_curvature()`. Additionally, the user needs to specify the number of subdivisions made to their curve(s). Greater subdivisions more completely sample the curve, but increases computing time. It is recommended to use subdivisions on the order of 800 or greater. 
-
-In its current form, `curvr` accepts outputs from the R package `Momocs` [@bonhomme_2014], specifically polynomial objects (`list`s, but not `OpnCoe`) fitted to landmarked specimens. Because polynomials will often miss local curvature features, future versions of `curvr` will adopt more sophisticated curve-fitting procedures from the field of outline-based morphometrics (discussed further in final section). 
+Similarly, the `curvr::curvature_tangle()` function also implements spline-fitting to estimate total curvature. However, this function differs in that FMM splines [@forsythe_1977] are used to interpolate points between the landmarks submitted by the user. Together, the original landmarks and the interpolated points are used to estimate changes in the tangent angle (equation 1) across the curve [@boehm_2021]. This approach is equivalent to taking the derivative of the tangent angle function [@zahn_1972] as implemented in R by Claude [-@claude_2008]. Total curvature is estimated by integrating $\frac{d\phi}{ds}$ as in equation 2.
 
 
 #### 3. Applications
@@ -156,6 +149,14 @@ https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293
 
 pgs 184, 186o
 https://ebookcentral.proquest.com/lib/ubc/reader.action?docID=422384&ppg=18
+
+Before point-wise curvature is estimated from the derivatives, the polynomial function is parameterized by arc length. The advantage of this step is that curvature can be calculated at even increments of arc length, $s$. The polynomial is parameterized by arc length by first splitting the curve into sub-curves of incrementally increasing proportions of total length, from 0 to 1. For example, a curve split into 10 parts would have 10 sub-curves with arc length calculated as $0.1(s)$, $0.2(s)$, ..., $1.0(s)$. Each sub-curve has a lower $x$ bound of known value (the lower bound of the original polynomial). The upper $x$ bound (of each sub-surve) is unknown. The root-finding function `stats::uniroot` solves for the unknown upper $x_i$ value, $u_i$, for each $i$ sub-curve:
+
+```f(u) = pracma::arclength(polynomial, lower x boundary, u)$length```
+
+The result is a vector of $x$ values that correspond to even increments of arc length along the polynomial. We then use the gradient (first derivatives, $y'$) and Hessian matricies (second derivatives, $y''$) to calculate point-wise $\kappa_i$ at every position $x_i$:
+
+$$\kappa = \frac{|y''|}{(1+y'^2)^{\frac{3}{2}}}$$ 
 
 #### References 
 
