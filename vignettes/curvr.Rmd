@@ -57,7 +57,7 @@ $$\kappa_{total} = \int_{0}^{s_{max}} \kappa \; ds$$
 
 At some arbitrary point $i$, point-curvature ($\kappa_i$) is reported as $radians$ per unit length. For example, if measurements have been made at every millimeter along the curve, point-wise curvature is reported as $radians \cdot mm^{-1}$. _Total curvature_, the sum of total tangent rotations across the length of the curve, is expressed as $radians$. Further technical details can be found in [@boehm_2021] and references therein.  
 
-The R package ```curvr``` was created to demonstrate the utility of this revised definition of curvature - it calculates total curvature from curves fitted to landmarked specimens. This package is designed to work alongside common protocols in geometric morphometrics (GM), the study of shape and its covariance with associated or causal variables [@bookstein_1991; @macleod_2002]. While relevant concepts from GM are outlined here, we recommend the concise introduction to the topic by Webster and Sheets [-@webster_2010], and for detailed reading, Zelditch et al [-@zelditch_2004].  
+The R package ```curvr``` was created to demonstrate the utility of this revised definition of curvature &mdash; it calculates total curvature from curves fitted to landmarked specimens. This package is designed to work alongside common protocols in geometric morphometrics (GM), the study of shape and its covariance with associated or causal variables [@bookstein_1991; @macleod_2002]. While relevant concepts from GM are outlined here, we recommend the concise introduction to the topic by Webster and Sheets [-@webster_2010], and for detailed reading, Zelditch et al [-@zelditch_2012].  
 
 Geometric morphometrics aims at quantifying shape, i.e. the geometric information remaining after after specimen size, location, and orientation have been accounted for [@kendall_1977; @bookstein_1991]. A typical GM protocol begins with assigning landmarks to the specimen. Landmarks are points on a specimen that are topologically or biologically homologous [@bookstein_1991]. Generally, the more landmarks assigned to a specimen, the more information about its shape that has been captured. In a comparative study, landmarked specimens are scaled, translated, and rotated to remove features not contributing to shape [@rohlf_1990_b]. In _outline-based_ GM, shape functions are fit to the landmarks, for example using the tangent angle function [@zahn_1972]. In _landmark-based_ GM, the set of landmarks are taken together as a 'landmark configuration' and exist in a multidimensional shape space, defined by the number of landmarks used, and the spatial dimensions in which they were assigned [2D or 3D, @kendall_1984]. In both approaches, shape has been summarised as a single variable so that useful statistical procedures can be applied; most GM protocols involve principal components analysis (PCA) of shape variables, enabling the major axes of shape variation to be calculated and plotted in PCA 'shape space' [@macleod_2002]. 
 
@@ -89,14 +89,16 @@ Similarly, the `curvr::curvature_tangle()` function also implements spline-fitti
 
 #### 3. Applications
 
-In this section, we will illustrate the utility of quantifying curvature along a typical analysis of morphometric data. Here, we will test whether bill curvature is correlated with variation along a principal component of shape space. Morphometric has been kindly provided by Navalon et al (2020) - their study examined skull and bill morphology as integrated or decoupled phenotypes. One of the results from Navalon et al (2020, p.17) states: 
+In this section, we will illustrate the utility of quantifying curvature along a typical analysis of morphometric data. Here, we will test whether bill curvature is correlated with variation along a principal component of shape space. For this demonstration, landmark was kindly provided by Navalon et al [-@navalon_2020] &mdash; their study tested whether skull and bill morphology are integrated or decoupled phenotypes. One of the results from Navalon et al (2020, p.271) states: 
+
+>"We found that each of the major clades of landbirds diverged to
+unique cranial morphologies. Parrots (Psittaciformes) are characterized by a single ancestral shift towards very high rates of skull shape evolution, resulting in a characteristic cranial anatomy with short, curved beaks and expanded braincases."
 
 
--Recreate GM analysis
--complement with curvature analysis
 
 
-Section: shortcoming of using polynomials. Suggest alternate methods. 
+
+ 
 Table 1. Functions available in ```curvr``` version 0.1.0 for computing point-wise curvature
 
 Columns: Function, Method, Reference
