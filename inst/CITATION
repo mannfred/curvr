@@ -1,7 +1,7 @@
 citHeader("To cite curvr in publications use:")
 
 citEntry(entry = "Article",
-  title        = "curvr: An R package for calculating curvature from landmarked specimens.",
+  title        = "curvr: {a}n R package for measuring total curvature from landmarked specimens.",
   author       = personList(as.person("Mannfred Masahiro Asada Boehm")),
   journal      = "TBD",
   year         = "2020",
@@ -12,7 +12,6 @@ citEntry(entry = "Article",
 
   textVersion  =
   paste("Mannfred M.A. Boehm (2020).",
-        "curvr: An R package for calculating curvature from landmarked specimens.",
-        "Journal TBD",
-        "URL TBD")
+        "curvr: an R package for measuring total curvature from landmarked specimens.",
+        "https://github.com/mannfred/curvr/")
 )
