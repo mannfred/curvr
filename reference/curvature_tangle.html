@@ -61,7 +61,6 @@ the Zahn and Roskies tangent angle function" />
 
 
 
-
   
 
   
@@ -84,7 +83,7 @@ the Zahn and Roskies tangent angle function" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curvr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -123,29 +122,16 @@ the Zahn and Roskies tangent angle function</h1>
 the Zahn and Roskies tangent angle function</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>curvature_tangle</span><span class='op'>(</span><span class='va'>coo_landmarks</span>, interpolation <span class='op'>=</span> <span class='fl'>500</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>curvature_tangle</span><span class='op'>(</span><span class='va'>landmark_matrix</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>function</th>
-      <td><p>a single variable function of x.
-E.g. for the polynomial function y=x^2 simply type <code>y^2</code>.</p></td>
-    </tr>
-    <tr>
-      <th>x_range</th>
-      <td><p>the lower and upper x-value bounds to
-calculate curvature. Concatenate the lower and upper bounds using
-<code><a href='https://rdrr.io/r/base/c.html'>c()</a></code>, E.g. for lower = 1 and upper = 10, type <code>c(1,10)</code>.</p></td>
-    </tr>
-    <tr>
-      <th>subdiv</th>
-      <td><p>number of subdivisions made
-within <code>x_range</code>. Curvature is calculated at every
-subdivision and summed to compute total curvature.
-Default is 1000. The same number of subdivisions will be
-applied to all curves, regardless of arclength.</p></td>
+      <th>landmark_matrix</th>
+      <td><p>is a <code>matrix</code> object with <code>[,1]</code>
+containing the x landmark coordinates and <code>[,2]</code> containing
+the y landmark coordinates.</p></td>
     </tr>
     </table>
 

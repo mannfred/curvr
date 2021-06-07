@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate total curvature from smoothing  splines. — curvature_spline • curvr</title>
+<title>Calculate total curvature from smoothing or interpolating splines. — curvature_spline • curvr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Calculate total curvature from smoothing  splines. — curvature_spline" />
-<meta property="og:description" content="Calculate total curvature from smoothing  splines." />
+<meta property="og:title" content="Calculate total curvature from smoothing or interpolating splines. — curvature_spline" />
+<meta property="og:description" content="Calculate total curvature from smoothing or interpolating splines." />
 
 
 
@@ -55,7 +55,6 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
-
 
 
 
@@ -81,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curvr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -109,20 +108,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate total curvature from smoothing  splines.</h1>
+    <h1>Calculate total curvature from smoothing or interpolating splines.</h1>
     
     <div class="hidden name"><code>curvature_spline.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate total curvature from smoothing  splines.</p>
+    <p>Calculate total curvature from smoothing or interpolating splines.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>curvature_spline</span><span class='op'>(</span><span class='va'>landmark_matrix</span>, <span class='va'>x_range</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>curvature_spline</span><span class='op'>(</span><span class='va'>landmark_matrix</span>, <span class='va'>x_range</span>, type <span class='op'>=</span> <span class='st'>"smooth"</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>landmark_matrix</th>
+      <td><p>is a <code>matrix</code> object with <code>[,1]</code>
+containing the x landmark coordinates and <code>[,2]</code> containing
+the y landmark coordinates.</p></td>
+    </tr>
     <tr>
       <th>x_range</th>
       <td><p>the lower and upper x-value bounds to
@@ -130,16 +135,17 @@ calculate curvature. Concatenate the lower and upper bounds using
 <code><a href='https://rdrr.io/r/base/c.html'>c()</a></code>, E.g. for lower = 1 and upper = 10, type <code>c(1,10)</code>.</p></td>
     </tr>
     <tr>
-      <th>model</th>
-      <td><p>is a <code>lm</code> object fitted to the predicted values
-of the first derivative of a <code>smooth.spline</code> object.
-See examples below.</p></td>
+      <th>type</th>
+      <td><p>either 'ip' for an interpolating spline or 'smooth' for a
+smoothing spline. Uses <code><a href='https://rdrr.io/r/stats/splinefun.html'>stats::spline()</a></code> or <code><a href='https://rdrr.io/r/stats/smooth.spline.html'>stats::smooth.spline()</a></code>, respectively,
+for curve fitting and estimating the derivatives. Default is <code>type = 'smooth'</code>.
+See: ?spline and ?smooth.spline for details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a numeric vector length 1 indicating the total curvature in radians.</p>
+    <p>a numeric indicating the total curvature in radians.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'></span>
