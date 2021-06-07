@@ -25,14 +25,14 @@
 #' my_poly <- Momocs::npoly(mdat, 2)
 #'
 #' # convert Momocs object into an expression
-#' poly_express <- as_expression(my_poly)
+#' poly_express <- curvr::as_expression(my_poly)
 #'
 #' # compute 1st (gradient) and 2nd (Hessian) derivatives
 #' stats::deriv3(poly_express, "x")
 #' @seealso \code{\link{parameterize}} for t-parameterizing Momocs polynomials
 #' and \code{\link{as_function}} for creating R functions.
 #'
-#'
+#' @export
 
 
 # as_expression()
@@ -73,14 +73,14 @@ as_expression <- function(poly, expr = TRUE) {
 #' library(Momocs)
 #' library(pracma)
 #'
-#' # x <- 1:10
-#' # y <- x^2
-#' #
-#' # # a fictional landmark dataset
-#' # mdat <- matrix(c(x,y), nrow=10, ncol=2)
-#' #
-#' # # fit a second-order polynomial to the landmarks
-#' # my_poly <- Momocs::npoly(mdat, 2)
+#' x <- 1:10
+#' y <- x^2
+#'
+#' # a fictional landmark dataset
+#' mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#'
+#' # fit a second-order polynomial to the landmarks
+#' my_poly <- Momocs::npoly(mdat, 2)
 #'
 #' # parameterize by t
 #' paramd_poly <- parameterize(my_poly)
@@ -90,7 +90,7 @@ as_expression <- function(poly, expr = TRUE) {
 #' @seealso \code{\link{as_expression}} for converting Momocs polynomials to expressions
 #' and \code{\link{as_function}} for creating R functions.
 #'
-#'
+#' @export
 
 # parameterize()
 
@@ -179,7 +179,7 @@ parameterize <- function(poly) {
 #' @seealso \code{\link{as_expression}} for converting Momocs polynomials to expressions
 #'
 #'
-#'
+#' @export
 
 # as_function()
 

@@ -1,19 +1,20 @@
 Package: curvr
 Type: Package
 Title: Calculate Total Curvature From Landmarked Specimens
-Version: 0.1.1
+Version: 0.0.1
 Authors@R: person("Mannfred Masahiro Asada", "Boehm", email = "mannfred.boehm@ubc.ca", 
   role = c("aut", "cre"))
-Description: Calculates total curvature from specimens
-    landmarked in Momocs. Total curvature can be calculated from 
-    fitted polynomials, smoothing splines, or from the tangent angle function. 
+Description: Calculates total curvature from landmarked specimens.
+    Total curvature can be calculated from 
+    fitted polynomials, smoothing and interpolating splines, or from the tangent angle function. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 3.6.0)
+Depends: R (>= 4.0.0)
 Imports: 
     dplyr (>= 0.8.3),
-    pracma (>= 2.2.5)
+    pracma (>= 2.2.5),
+    Deriv (>= 4.1.1)
 Suggests: 
     knitr (>= 1.28),
     Momocs (>= 1.2.9),

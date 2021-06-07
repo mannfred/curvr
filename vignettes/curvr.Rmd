@@ -99,7 +99,7 @@ unique cranial morphologies. Parrots (Psittaciformes) are characterized by a sin
 
 
  
-Table 1. Functions available in ```curvr``` version 0.1.0 for computing point-wise curvature
+Table 1. Functions available in ```curvr``` version 0.0.1 for computing point-wise curvature
 
 Columns: Function, Method, Reference
 

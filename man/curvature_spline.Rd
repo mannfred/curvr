@@ -2,24 +2,29 @@
 % Please edit documentation in R/curvature_spline.R
 \name{curvature_spline}
 \alias{curvature_spline}
-\title{Calculate total curvature from smoothing  splines.}
+\title{Calculate total curvature from smoothing or interpolating splines.}
 \usage{
-curvature_spline(landmark_matrix, x_range)
+curvature_spline(landmark_matrix, x_range, type = "smooth")
 }
 \arguments{
+\item{landmark_matrix}{is a \code{matrix} object with \code{[,1]}
+containing the x landmark coordinates and \code{[,2]} containing
+the y landmark coordinates.}
+
 \item{x_range}{the lower and upper x-value bounds to
 calculate curvature. Concatenate the lower and upper bounds using
 \code{c()}, E.g. for lower = 1 and upper = 10, type \code{c(1,10)}.}
 
-\item{model}{is a \code{lm} object fitted to the predicted values
-of the first derivative of a \code{smooth.spline} object.
-See examples below.}
+\item{type}{either 'ip' for an interpolating spline or 'smooth' for a
+smoothing spline. Uses \code{stats::spline()} or \code{stats::smooth.spline()}, respectively,
+for curve fitting and estimating the derivatives. Default is \code{type = 'smooth'}.
+See: ?spline and ?smooth.spline for details.}
 }
 \value{
-a numeric vector length 1 indicating the total curvature in radians.
+a numeric indicating the total curvature in radians.
 }
 \description{
-Calculate total curvature from smoothing  splines.
+Calculate total curvature from smoothing or interpolating splines.
 }
 \examples{
 

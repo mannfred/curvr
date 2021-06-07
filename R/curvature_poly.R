@@ -32,14 +32,14 @@
 #'
 #' library(Momocs)
 #'
-#' # x <- 1:10
-#' # y <- x^2
-#' #
-#' # # a fictional landmark dataset
-#' # mdat <- matrix(c(x,y), nrow=10, ncol=2)
-#' #
-#' # # fit second-order polynomial to landmarks
-#' # my_poly <- Momocs::npoly(mdat, 2)
+#' x <- 1:10
+#' y <- x^2
+#'
+#' # a fictional landmark dataset
+#' mdat <- matrix(c(x,y), nrow=10, ncol=2)
+#'
+#' # fit second-order polynomial to landmarks
+#' my_poly <- Momocs::npoly(mdat, 2)
 #'
 #' # extract x bounds from Momocs polynomial object
 #' x_range <- c(my_poly$baseline1[[1]], my_poly$baseline2[[1]])
@@ -50,7 +50,7 @@
 #' @importFrom stats deriv3
 #' @importFrom stats uniroot
 #' @importFrom pracma arclength
-#'
+#' @importFrom Deriv Deriv
 #' @export
 
 

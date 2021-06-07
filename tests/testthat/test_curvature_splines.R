@@ -7,17 +7,30 @@ test_that("total curvature of a unit circle is equal to radian distance", {
   mdat <- matrix(c(x, y), nrow = 101, ncol = 2)
 
   int1 <-
-    curvature_spline(mdat, c(0, sqrt(2)/2)) %>%
+    curvature_spline(mdat, c(0, sqrt(2)/2), type='smooth') %>%
     abs() %>%
     round(digits = 3)
 
   int2 <-
-    curvature_spline(mdat, c(0, sqrt(3)/2))  %>%
+    curvature_spline(mdat, c(0, sqrt(3)/2), type='smooth')  %>%
+    abs() %>%
+    round(digits = 3)
+
+  int3 <-
+    curvature_spline(mdat, c(0, sqrt(2)/2), type='ip') %>%
+    abs() %>%
+    round(digits = 3)
+
+  int4 <-
+    curvature_spline(mdat, c(0, sqrt(3)/2), type='ip')  %>%
     abs() %>%
     round(digits = 3)
 
   expect_equal(int1, round(pi/4, digits=3))
   expect_equal(int2, round(pi/3, digits=3))
+  expect_equal(int3, round(pi/4, digits=3))
+  expect_equal(int4, round(pi/3, digits=3))
+
 
 })
 
@@ -35,4 +48,5 @@ test_that("total curvature is equal between functions", {
   expect_equal(kpoly, kspline)
   expect_equal(kpoly, ktangle)
   expect_equal(kspline, ktangle)
-}
+
+})

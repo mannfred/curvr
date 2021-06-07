@@ -5,21 +5,12 @@
 \title{Calculate total curvature by taking the derivative of
 the Zahn and Roskies tangent angle function}
 \usage{
-curvature_tangle(coo_landmarks, interpolation = 500)
+curvature_tangle(landmark_matrix)
 }
 \arguments{
-\item{function}{a single variable function of x.
-E.g. for the polynomial function y=x^2 simply type \code{y^2}.}
-
-\item{x_range}{the lower and upper x-value bounds to
-calculate curvature. Concatenate the lower and upper bounds using
-\code{c()}, E.g. for lower = 1 and upper = 10, type \code{c(1,10)}.}
-
-\item{subdiv}{number of subdivisions made
-within \code{x_range}. Curvature is calculated at every
-subdivision and summed to compute total curvature.
-Default is 1000. The same number of subdivisions will be
-applied to all curves, regardless of arclength.}
+\item{landmark_matrix}{is a \code{matrix} object with \code{[,1]}
+containing the x landmark coordinates and \code{[,2]} containing
+the y landmark coordinates.}
 }
 \value{
 a numeric vector length 1 indicating the total curvature in radians.

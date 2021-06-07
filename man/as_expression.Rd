@@ -34,7 +34,7 @@ mdat <- matrix(c(x, y), nrow = 10, ncol = 2)
 my_poly <- Momocs::npoly(mdat, 2)
 
 # convert Momocs object into an expression
-poly_express <- as_expression(my_poly)
+poly_express <- curvr::as_expression(my_poly)
 
 # compute 1st (gradient) and 2nd (Hessian) derivatives
 stats::deriv3(poly_express, "x")

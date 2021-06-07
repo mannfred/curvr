@@ -1,16 +1,20 @@
-#' Calculate total curvature from smoothing  splines.
+#' Calculate total curvature from smoothing or interpolating splines.
 #'
 #'
-#' @param model is a \code{lm} object fitted to the predicted values
-#' of the first derivative of a \code{smooth.spline} object.
-#' See examples below.
+#' @param landmark_matrix is a \code{matrix} object with \code{[,1]}
+#' containing the x landmark coordinates and \code{[,2]} containing
+#' the y landmark coordinates.
 #'
 #' @param x_range the lower and upper x-value bounds to
 #' calculate curvature. Concatenate the lower and upper bounds using
 #' \code{c()}, E.g. for lower = 1 and upper = 10, type \code{c(1,10)}.
 #'
+#' @param type either 'ip' for an interpolating spline or 'smooth' for a
+#' smoothing spline. Uses \code{stats::spline()} or \code{stats::smooth.spline()}, respectively,
+#' for curve fitting and estimating the derivatives. Default is \code{type = 'smooth'}.
+#' See: ?spline and ?smooth.spline for details.
 #'
-#' @return a numeric vector length 1 indicating the total curvature in radians.
+#' @return a numeric indicating the total curvature in radians.
 #'
 #' @examples
 #'
@@ -18,7 +22,7 @@
 #'
 #' @export
 
-curvature_spline <- function(landmark_matrix, x_range) {
+curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
 
   # extract/separate x and y coords
   x_coords <- landmark_matrix[, 1]
@@ -29,17 +33,41 @@ curvature_spline <- function(landmark_matrix, x_range) {
     stop("every x coordinate must have a corresponding y coordinate")
   }
 
-  # fit a spline to landmark coordinates
-  s0 <- smooth.spline(landmark_matrix)
+  if (type == 'smooth'){
+    # fit a spline to landmark coordinates
+    s0 <- smooth.spline(landmark_matrix)
 
-  # first deriv values
-  s1 <- predict(s0, deriv = 1)
+    # first deriv values
+    s1 <- predict(s0, deriv = 1)
 
-  # fit spline func to first deriv values
-  s1func <- splinefun(x = s1$x, y = s1$y)
+    # fit spline func to first deriv values
+    s1func <- splinefun(x = s1$x, y = s1$y)
 
-  # second deriv func (1st deriv of s1)
-  s2func <- splinefun(x = s1$x, y = s1func(s1$x, deriv = 1))
+    # second deriv func (1st deriv of s1)
+    s2func <- splinefun(x = s1$x, y = s1func(s1$x, deriv = 1))
+
+  } else if (type == 'ip'){
+
+    # compute coordinates from a cubic spline fit
+    s0 <- spline(landmark_matrix)
+
+    # create a spline function from coordinates
+    s0func <- splinefun(s0$x, s0$y)
+
+    # estimate y coords of first derivative
+    s1 <- s0func(s0$x, deriv = 1)
+
+    # create a function for first derivative
+    s1func <- splinefun(s0$x, s1)
+
+    # create a function for second derivative
+    s2func <- splinefun(x = s0$x, y = s1func(s0$x, deriv = 1))
+
+  } else {
+
+    stop("spline type must be 'ip' or 'smooth'")
+
+  }
 
   # define K * ds
   k_fun <- function(x) {

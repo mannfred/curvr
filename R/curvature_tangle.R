@@ -2,18 +2,9 @@
 #' the Zahn and Roskies tangent angle function
 #'
 #'
-#' @param function a single variable function of x.
-#' E.g. for the polynomial function y=x^2 simply type \code{y^2}.
-#'
-#' @param x_range the lower and upper x-value bounds to
-#' calculate curvature. Concatenate the lower and upper bounds using
-#' \code{c()}, E.g. for lower = 1 and upper = 10, type \code{c(1,10)}.
-#'
-#' @param subdiv number of subdivisions made
-#' within \code{x_range}. Curvature is calculated at every
-#' subdivision and summed to compute total curvature.
-#' Default is 1000. The same number of subdivisions will be
-#' applied to all curves, regardless of arclength.
+#' @param landmark_matrix is a \code{matrix} object with \code{[,1]}
+#' containing the x landmark coordinates and \code{[,2]} containing
+#' the y landmark coordinates.
 #'
 #' @return a numeric vector length 1 indicating the total curvature in radians.
 #'
