@@ -81,7 +81,7 @@ for computing derivatives by stats::deriv3()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curvr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
@@ -165,21 +165,11 @@ and <code><a href='as_function.html'>as_function</a></code> for creating R funct
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># convert Momocs object into an expression</span></span>
 <span class='r-in'><span class='va'>poly_express</span> <span class='op'>&lt;-</span> <span class='fu'>curvr</span><span class='fu'>::</span><span class='fu'>as_expression</span><span class='op'>(</span><span class='va'>my_poly</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error:</span> 'as_expression' is not an exported object from 'namespace:curvr'</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># compute 1st (gradient) and 2nd (Hessian) derivatives</span></span>
 <span class='r-in'><span class='fu'>stats</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/stats/deriv.html'>deriv3</a></span><span class='op'>(</span><span class='va'>poly_express</span>, <span class='st'>"x"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> expression({</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     .value &lt;- x^0 * -4.11123302232369e-15 + x^1 * 1.56456361129125e-15 + </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         x^2 * 1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     .grad &lt;- array(0, c(length(.value), 1L), list(NULL, c("x")))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     .hessian &lt;- array(0, c(length(.value), 1L, 1L), list(NULL, </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>         c("x"), c("x")))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     .grad[, "x"] &lt;- 1.56456361129125e-15 + 2 * x</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     .hessian[, "x", "x"] &lt;- 2</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     attr(.value, "gradient") &lt;- .grad</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     attr(.value, "hessian") &lt;- .hessian</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>     .value</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> })</span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in stats::deriv3(poly_express, "x")</span> object 'poly_express' not found</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

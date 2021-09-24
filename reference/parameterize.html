@@ -81,7 +81,7 @@ polynomials readable by pracma::arclength()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curvr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
@@ -157,18 +157,11 @@ and <code><a href='as_function.html'>as_function</a></code> for creating R funct
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># parameterize by t</span></span>
 <span class='r-in'><span class='va'>paramd_poly</span> <span class='op'>&lt;-</span> <span class='fu'>parameterize</span><span class='op'>(</span><span class='va'>my_poly</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in parameterize(my_poly)</span> could not find function "parameterize"</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># calculate arc length between x=0 and x=1</span></span>
 <span class='r-in'><span class='fu'>pracma</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/pracma/man/arclength.html'>arclength</a></span><span class='op'>(</span><span class='va'>paramd_poly</span>, <span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $length</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1.478943</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $niter</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 5</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> $rel.err</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 9.226869e-07</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in match.fun(f)</span> object 'paramd_poly' not found</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

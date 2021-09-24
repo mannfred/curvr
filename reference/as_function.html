@@ -81,7 +81,7 @@ Allows the calculation of y-coordinates from polynomials." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curvr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
@@ -155,6 +155,7 @@ Allows the calculation of y-coordinates from polynomials.</p>
 <span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>essentially perfect fit: summary may be unreliable</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>paramd_poly</span> <span class='op'>&lt;-</span> <span class='fu'><a href='parameterize.html'>parameterize</a></span><span class='op'>(</span><span class='va'>my_poly</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in parameterize(my_poly)</span> could not find function "parameterize"</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>subdiv</span> <span class='op'>&lt;-</span> <span class='fl'>100</span> <span class='co'># number of times to subdivide the curve</span></span>
 <span class='r-in'><span class='va'>iter</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, by <span class='op'>=</span> <span class='fl'>1</span> <span class='op'>/</span> <span class='va'>subdiv</span><span class='op'>)</span></span>
@@ -163,6 +164,7 @@ Allows the calculation of y-coordinates from polynomials.</p>
 <span class='r-in'><span class='co'># arc length of t-parameterized function between x = [0, 1]</span></span>
 <span class='r-in'><span class='va'>x_range</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>b</span> <span class='op'>&lt;-</span> <span class='fu'>pracma</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/pracma/man/arclength.html'>arclength</a></span><span class='op'>(</span><span class='va'>paramd_poly</span>, <span class='va'>x_range</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>x_range</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span><span class='op'>$</span><span class='va'>length</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in match.fun(f)</span> object 'paramd_poly' not found</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># for every fraction of arclength, b*i, create a function(u) with an unknown</span></span>
 <span class='r-in'><span class='co'># x-coordinate, u. Solve for u by uniroot().</span></span>
@@ -173,6 +175,7 @@ Allows the calculation of y-coordinates from polynomials.</p>
 <span class='r-in'>      <span class='kw'>function</span><span class='op'>(</span><span class='va'>u</span><span class='op'>)</span> <span class='fu'>pracma</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/pracma/man/arclength.html'>arclength</a></span><span class='op'>(</span><span class='va'>paramd_poly</span>, <span class='va'>x_range</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>u</span><span class='op'>)</span><span class='op'>$</span><span class='va'>length</span> <span class='op'>-</span> <span class='va'>b_sub</span></span>
 <span class='r-in'>    <span class='op'>}</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in eval(quote({    b_sub &lt;- iter[i] * b    function(u) pracma::arclength(paramd_poly, x_range[1], u)$length -         b_sub}), new.env())</span> object 'b' not found</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># root-finding function</span></span>
 <span class='r-in'><span class='va'>root_find</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/stats/uniroot.html'>uniroot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>x_range</span><span class='op'>)</span><span class='op'>$</span><span class='va'>root</span></span>
@@ -182,8 +185,10 @@ Allows the calculation of y-coordinates from polynomials.</p>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># solve for corresponding y-values</span></span>
 <span class='r-in'><span class='va'>func_poly</span> <span class='op'>&lt;-</span> <span class='fu'>as_function</span><span class='op'>(</span><span class='va'>my_poly</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in as_function(my_poly)</span> could not find function "as_function"</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'>func_poly</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in func_poly(x)</span> could not find function "func_poly"</span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
