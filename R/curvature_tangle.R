@@ -6,6 +6,11 @@
 #' containing the x landmark coordinates and \code{[,2]} containing
 #' the y landmark coordinates.
 #'
+#' @param iterations is the number of times to run the spline interpolation procedure.
+#' The more times this is run, the more the specimen will be sampled. `iter = 10` is
+#' about the highest one should go before seeing a high tradeoff between accuracy and
+#' run time.
+#'
 #' @return a numeric vector length 1 indicating the total curvature in radians.
 #'
 #' @examples
@@ -14,29 +19,32 @@
 #'
 #' @export
 
-curvature_tangle <- function(landmark_matrix) {
+curvature_tangle <- function(landmark_matrix, iterations) {
 
   mdat <- landmark_matrix
-  ip1 <- spline(mdat[,1], mdat[,2], method='fmm') #first interpolation
-  ip2 <- spline(ip1$x, ip1$y, method='fmm') #second interpolation
-  ip3 <- spline(ip2$x, ip2$y, method='fmm') # third interpolation
+  iter <- iterations
+  sp_list <- list()
 
-  coords <- matrix(c(ip3$x, ip3$y), nrow = length(ip3$x), ncol = 2)
+  sp_list[[1]] <- spline(mdat[,1], mdat[,2], method='fmm') # first interpolation
+
+
+  for (i in 2:iter) {
+    sp_list[[i]] <- spline(sp_list[[i-1]]$x, sp_list[[i-1]]$y, method='fmm') # iterations 2 to n
+  }
+
+
+  coords <- matrix(c(sp_list[[iter]]$x, sp_list[[iter]]$y), nrow = length(sp_list[[iter]]$x), ncol = 2)
 
   # calculate tangent vector between adjacent coordinates
-  tangvect <- coords[-1, ] - coords[-nrow(coords), ]
+  tangvect <- diff(coords)
 
   # using Arg() to calculate the angle (argument) between tangent vectors
   tet1 <-
-    Arg(complex(
-      real = tangvect[, 1],
-      imaginary = tangvect[, 2]
-    ))
+    complex(real = tangvect[, 1], imaginary = tangvect[, 2]) %>%
+    Arg()
 
   # calculate the change in angle between coordinates
-  dphi <-
-    abs(tet1[-1] - tet1[-length(tet1)])
-
+  dphi <- abs(diff(tet1))
 
   # total curvature
   totalK <- sum(dphi)
