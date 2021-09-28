@@ -18,7 +18,16 @@
 #'
 #' @examples
 #'
+#' # a landmark matrix describing a segment of the unit circle#'
+#' x <- seq(0, 1, by = 0.01)
+#' y <- sqrt(1-x^2)
+#' mdat <- matrix(c(x, y), nrow = 101, ncol = 2)
+#'
+#' # total curvature between x=0 and x=sqrt(2)/2 should be approximately pi/4
+#' abs(curvature_spline(mdat, c(0, sqrt(2)/2), type='smooth'))
+#'
 #' @importFrom dplyr %>%
+#' @importFrom stats smooth.spline predict splinefun spline integrate
 #'
 #' @export
 

@@ -7,13 +7,20 @@
 #' the y landmark coordinates.
 #'
 #' @param iterations is the number of times to run the spline interpolation procedure.
-#' The more times this is run, the more the specimen will be sampled. `iter = 10` is
-#' about the highest one should go before seeing a high tradeoff between accuracy and
-#' run time.
+#' The more times this is run, the more the specimen will be sampled. Every 1-2 iterations
+#' adds an order of magnitude of interpolated landmarks.
 #'
 #' @return a numeric vector length 1 indicating the total curvature in radians.
 #'
 #' @examples
+#'
+#' # a landmark matrix describing a 1/8 unit circle
+#' x1 <- seq(0, sqrt(2)/2, length.out=9)
+#' y1 <- sqrt(1-x1^2)
+#' mdat1 <- matrix(c(x1, y1), nrow = length(x1), ncol = 2)
+#'
+#' # total curvature should be approximately pi/4
+#' abs(curvature_tangle(mdat1, 10))
 #'
 #' @importFrom dplyr %>%
 #'

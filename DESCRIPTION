@@ -12,14 +12,10 @@ Encoding: UTF-8
 LazyData: true
 Depends: R (>= 4.0.0)
 Imports: 
-    dplyr (>= 0.8.3),
-    pracma (>= 2.2.5),
-    Deriv (>= 4.1.1)
+    dplyr (>= 0.8.3)
 Suggests: 
     knitr (>= 1.28),
-    Momocs (>= 1.2.9),
-    Momit (>= 0.1.0),
     rmarkdown (>= 2.1),
     testthat (>= 2.3.2)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr

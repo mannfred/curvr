@@ -5,12 +5,16 @@
 \title{Calculate total curvature by taking the derivative of
 the Zahn and Roskies tangent angle function}
 \usage{
-curvature_tangle(landmark_matrix)
+curvature_tangle(landmark_matrix, iterations)
 }
 \arguments{
 \item{landmark_matrix}{is a \code{matrix} object with \code{[,1]}
 containing the x landmark coordinates and \code{[,2]} containing
 the y landmark coordinates.}
+
+\item{iterations}{is the number of times to run the spline interpolation procedure.
+The more times this is run, the more the specimen will be sampled. Every 1-2 iterations
+adds an order of magnitude of interpolated landmarks.}
 }
 \value{
 a numeric vector length 1 indicating the total curvature in radians.
@@ -20,5 +24,13 @@ Calculate total curvature by taking the derivative of
 the Zahn and Roskies tangent angle function
 }
 \examples{
+
+# a landmark matrix describing a 1/8 unit circle
+x1 <- seq(0, sqrt(2)/2, length.out=9)
+y1 <- sqrt(1-x1^2)
+mdat1 <- matrix(c(x1, y1), nrow = length(x1), ncol = 2)
+
+# total curvature should be approximately pi/4
+abs(curvature_tangle(mdat1, 10))
 
 }
