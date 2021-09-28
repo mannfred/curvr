@@ -16,15 +16,6 @@
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/reference/as_expression.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as_function.html</loc>
-  </url>
-  <url>
-    <loc>/reference/curvature_poly.html</loc>
-  </url>
-  <url>
     <loc>/reference/curvature_spline.html</loc>
   </url>
   <url>
@@ -35,8 +26,5 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/parameterize.html</loc>
   </url>
 </urlset>

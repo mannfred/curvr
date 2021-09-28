@@ -1,7 +1,7 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: 9ac9c8d5a6ca30325100205161441df8cf427035
+pkgdown_sha: 632889250b23aae88d6b3adcc0afd48160cb17ca
 articles:
   curvr: curvr.html
-last_built: 2021-09-24T23:25Z
+last_built: 2021-09-28T00:54Z
 

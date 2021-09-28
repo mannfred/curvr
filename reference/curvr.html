@@ -135,10 +135,10 @@ across the polynomial, outputting 'total curvature'.</p>
 curvature along bounded polynomials fitted to curved specimens (e.g. corolla tubes, bird bills).</p>
 <p>Calculating point-wise curvature, K, involves parameterizing the fitted polynomial function
 by arclength and computing the tangent directions along the curve. The helper function
-<code><a href='parameterize.html'>parameterize()</a></code> converts polynomial objects from <code>Momocs</code> into t-parameterized
-polynomials readable by <code><a href='https://rdrr.io/pkg/pracma/man/arclength.html'>pracma::arclength()</a></code>. <code><a href='as_function.html'>as_function()</a></code> computes the
+<code>parameterize()</code> converts polynomial objects from <code>Momocs</code> into t-parameterized
+polynomials readable by <code><a href='https://rdrr.io/pkg/pracma/man/arclength.html'>pracma::arclength()</a></code>. <code>as_function()</code> computes the
 y coordinates of our polynomial once the x-coordinates of the arclength-parameterized
-function are known. <code><a href='as_expression.html'>as_expression()</a></code> converts a <code>Momocs</code> polynomial to an
+function are known. <code>as_expression()</code> converts a <code>Momocs</code> polynomial to an
 expression so that derivatives can be computed using <code><a href='https://rdrr.io/r/stats/deriv.html'>stats::deriv3()</a></code>.</p>
 
   </div>
