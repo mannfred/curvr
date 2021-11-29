@@ -31,7 +31,7 @@
 #'
 #' @export
 
-curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
+curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', remove_local_K=NULL) {
 
   # extract/separate x and y coords
   x_coords <- landmark_matrix[, 1]
@@ -87,5 +87,19 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
 
   # compute integral of K*ds
   Ktot <- integrate(k_fun, lower = x_range[1], upper = x_range[2])$value
-  return(Ktot)
+
+
+  # remove local curvature anomalies
+  y <- sapply(seq(x_range[1], x_range[2], by = 0.01), k_fun)
+  Ki <- diff(y)
+
+  if (is.null(remove_local_K) == FALSE) {
+    for (i in 1:length(Ki)) {
+      if (abs(Ki[i]) > abs(remove_local_K*Ktot)) {Ki[i] <- 0}
+      else {Ki[i] <- Ki[i]}
+    }
+  }
+
+  curvature <- list(Ktot = Ktot, Ktot_without_local = sum(Ki), Ki = Ki )
+  return(curvature)
 }
