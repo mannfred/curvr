@@ -69,9 +69,9 @@
 
     
     
-<div id="abstract" class="section level4">
-<h4 class="hasAnchor">
-<a href="#abstract" class="anchor" aria-hidden="true"></a>Abstract</h4>
+<div class="section level4">
+<h4 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
+</h4>
 <ol style="list-style-type: decimal">
 <li><p>Flower-pollinator curvature as viewed from the side (dorsiventral plane) has been a trait of special interest through the post-Darwinian era of pollination ecology. However, within pollination ecology there are at least four metrics in use with few references to their origins or the meaning of the associated units. <span class="citation">(Boehm et al., <a href="#ref-boehm_2020" role="doc-biblioref">2020</a>)</span> recently suggested clarifying the definition of curvature by using concepts from differential geometry.</p></li>
 <li><p>Here, we introduce an R package <code>curvr</code> for computing curvature from lines fitted to landmarked specimens. <code>curvr</code> is designed to take inputs from <code>Momocs</code>, an open-source toolkit for 2D morphometrics in R. We also outline possible advances to the curve-fitting protocol that may subsequently improve estimations of total curvature.</p></li>
@@ -80,9 +80,9 @@
 </ol>
 <div style="page-break-after: always;"></div>
 </div>
-<div id="introduction" class="section level4">
-<h4 class="hasAnchor">
-<a href="#introduction" class="anchor" aria-hidden="true"></a>1. Introduction</h4>
+<div class="section level4">
+<h4 id="introduction">1. Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h4>
 <p>The curvature of flowers and pollinator mouthparts (e.g. bird bills) is a widespread trait contributing to morphological diversity in the angiosperms and their pollinators. The evolutionary ecology and history of measuring curvature in pollination ecology was recently reviewed in <span class="citation">(<span class="citeproc-not-found" data-reference-id="boehm_2021"><strong>???</strong></span>)</span>. To briefly summarize; the curvature of floral tubes as viewed from the dorsiventral plane (hereafter ‘curvature’) has long been recognized as morphological feature that contributes to floral isolation <span class="citation">(sensu Grant, <a href="#ref-grant_1949" role="doc-biblioref">1949</a>)</span>. As curvature represents one of three spatial dimensions through which floral morphology can evolve (in addition to width and length), it is likely to play a role in floral diversification <span class="citation">(Kay and Sargent, <a href="#ref-kay_2009" role="doc-biblioref">2009</a>; Armbruster and Muchhala, <a href="#ref-armbruster_2009" role="doc-biblioref">2009</a>; Vamosi et al., <a href="#ref-vamosi_2018" role="doc-biblioref">2018</a>)</span>. Similarly, pollinators that specialize on curved flowers evolve curved mouthparts, contributing to morphological diversification of these clades <span class="citation">(Weinstein and Graham, <a href="#ref-weinstein_2017" role="doc-biblioref">2017</a>; Maruyama et al., <a href="#ref-maruyama_2018" role="doc-biblioref">2018</a>)</span>. Thus, flower-pollinator curvature has been of special interest to pollination ecologists, resulting in over 40 studies since the late 1970’s <span class="citation">(<span class="citeproc-not-found" data-reference-id="boehm_2021"><strong>???</strong></span>)</span>. Among these studies, Boehm et al. <span class="citation">(<span class="citeproc-not-found" data-reference-id="boehm_2021"><strong>???</strong></span>)</span> identified four metrics for defining and quantifying curvature, in addition to the more general approach of quantifying shape via geometric morphometrics. Despite the many approaches to measuring curvature there is a lack of consensus as to what curvature means, how to interpret their units, and how varying methods could or should be compared. To this end, <span class="citation">(<span class="citeproc-not-found" data-reference-id="boehm_2021"><strong>???</strong></span>)</span> proposed a revised definition of curvature that directly borrowed from the mathematical literature, including an interpretation of accompanying units.</p>
 <p>Curvature, as defined in differential geometry, is the rate of change of the tangent, <span class="math inline">\(\mathbf{T}\)</span>, with respect to arc length, <span class="math inline">\(s\)</span>, along the curve:</p>
 <p><span class="math display">\[\kappa = \frac{d \mathbf{T}}{ds}\]</span></p>
@@ -96,11 +96,11 @@
 <p>Inspection of deformation grids <span class="citation">(Bookstein, <a href="#ref-bookstein_1991" role="doc-biblioref">1991</a>)</span> or end-member specimens <span class="citation">(MacLeod, <a href="#ref-macleod_2002" role="doc-biblioref">2002</a>)</span> plotted onto these axes are suggestive of the geometric features contributing to shape variation (e.g. curvature). The role of <code>curvr</code> is to re-purpose the landmark assignments used in the GM analysis to calculate <em>total curvature</em> from each specimen. By explicitly quantifying curvature, the investigator can explicitly test the contribution of curvature to shape variation along some principal axis of interest. In the following section the algorithms for computing total curvature are described, followed by a demonstration of its utility alongside a typical GM analysis.</p>
 <div style="page-break-after: always;"></div>
 </div>
-<div id="the-curvr-package" class="section level4">
-<h4 class="hasAnchor">
-<a href="#the-curvr-package" class="anchor" aria-hidden="true"></a>2. The <code>curvr</code> package</h4>
+<div class="section level4">
+<h4 id="the-curvr-package">2. The <code>curvr</code> package<a class="anchor" aria-label="anchor" href="#the-curvr-package"></a>
+</h4>
 <p>Computing total curvature necessitates fitting a curve to the specimen of interest. Fortunately, the landmarks used in a GM protocol can be re-purposed for regressing curves to the specimen. However, in GM, landmarks are placed throughout the entire specimen to quantify shape. Quantifying curvature typically implies a segment of the shape that is of particular interest <span class="citation">(but see: Silk and Erickson, <a href="#ref-silk_1978" role="doc-biblioref">1978</a>)</span>, therefore the landmarks used for curvature analysis will be a subset of those used in the GM protocol.</p>
-<p>The <code>curvr</code> package can be used alongside a typical GM protocol where specimens have been digitally landmarked, e.g. using tpsDig <span class="citation">(Rohlf, <a href="#ref-rohlf_2015" role="doc-biblioref">2015</a>)</span>, <code>Momocs</code> <span class="citation">(Bonhomme et al., <a href="#ref-bonhomme_2014" role="doc-biblioref">2014</a>)</span>, or <code>geomorph</code> <span class="citation">(Adams and Otárola-Castillo, <a href="#ref-adams_2013" role="doc-biblioref">2013</a>)</span>. Once a set of specimens have been landmarked, the corresponding files can be imported into R using e.g. <code><a href="https://rdrr.io/pkg/geomorph/man/readland.tps.html" class="external-link">geomorph::readland.tps()</a></code>. For open curves, we recommend rotating so that the longest axis of the shape is parallel to the x-axis, so that single-valued functions (SVF) can be fit &amp;emdash; this can be done with <code><a href="https://rdrr.io/pkg/Momocs/man/coo_alignxax.html" class="external-link">Momocs::coo_alignxax()</a></code>. Total curvature can then be computed using <code><a href="../reference/curvature_spline.html">curvr::curvature_spline()</a></code>. This function takes three arguments: the first is the <code>matrix</code> object containing the landmark data, the second is the upper and lower bounds of the curve from which to estimate curvature, and the third is the type of spline to fit to the landmarks.</p>
+<p>The <code>curvr</code> package can be used alongside a typical GM protocol where specimens have been digitally landmarked, e.g. using tpsDig <span class="citation">(Rohlf, <a href="#ref-rohlf_2015" role="doc-biblioref">2015</a>)</span>, <code>Momocs</code> <span class="citation">(Bonhomme et al., <a href="#ref-bonhomme_2014" role="doc-biblioref">2014</a>)</span>, or <code>geomorph</code> <span class="citation">(Adams and Otárola-Castillo, <a href="#ref-adams_2013" role="doc-biblioref">2013</a>)</span>. Once a set of specimens have been landmarked, the corresponding files can be imported into R using e.g. <code>geomorph::readland.tps()</code>. For open curves, we recommend rotating so that the longest axis of the shape is parallel to the x-axis, so that single-valued functions (SVF) can be fit &amp;emdash; this can be done with <code>Momocs::coo_alignxax()</code>. Total curvature can then be computed using <code><a href="../reference/curvature_spline.html">curvr::curvature_spline()</a></code>. This function takes three arguments: the first is the <code>matrix</code> object containing the landmark data, the second is the upper and lower bounds of the curve from which to estimate curvature, and the third is the type of spline to fit to the landmarks.</p>
 <p>Since GM practitioners will be well-versed in handling landmark matricies, we will focus on the latter two arguments. The <code>x_range</code> argument will, in most cases, be a numeric vector of the first and last x-axis landmark of the specimen. If handling multiple specimens, we recommend extracting these boundaries and storing in a <code>list</code>. Deciding on the <code>type</code> argument will vary between systems. Two options are available: <code>smooth</code> (smoothing) and <code>ip</code> (interpolating). Perperoglou et al. <span class="citation">(<span class="citeproc-not-found" data-reference-id="perperoglou_2019"><strong>???</strong></span>)</span> recently reviewed spline fitting procedures in R, and we recommend this primer to assess which is appropriate for the study system at hand.</p>
 <p>The <code><a href="../reference/curvature_spline.html">curvature_spline()</a></code> function first takes the landmark matrix and fits a spline via <code><a href="https://rdrr.io/r/stats/smooth.spline.html" class="external-link">stats::smooth.spline()</a></code> or <code><a href="https://rdrr.io/r/stats/splinefun.html" class="external-link">stats::spline()</a></code>. From these splines, the first and second derivatives are computed and stored as functions using <code><a href="https://rdrr.io/r/stats/splinefun.html" class="external-link">stats::splinefun()</a></code> with the appropriate <code>deriv</code> argument.</p>
 <p>A function for point-wise curvature <span class="math inline">\(\kappa_i\)</span> is then constructed as:</p>
@@ -111,9 +111,9 @@
 <!-- Similarly, the `curvr::curvature_tangle()` function also implements spline-fitting to estimate total curvature. However, this function differs in that FMM splines [@forsythe_1977] are used to interpolate points between the landmarks submitted by the user. Together, the original landmarks and the interpolated points are used to estimate changes in the tangent angle (equation 1) across the curve [@boehm_2021]. This approach is equivalent to taking the derivative of the tangent angle function [@zahn_1972] as implemented in R by Claude [-@claude_2008]. Total curvature is estimated by integrating $\frac{d\phi}{ds}$ as in equation 2. -->
 <p> </p>
 </div>
-<div id="applications" class="section level4">
-<h4 class="hasAnchor">
-<a href="#applications" class="anchor" aria-hidden="true"></a>3. Applications</h4>
+<div class="section level4">
+<h4 id="applications">3. Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
+</h4>
 <p>In this section, we illustrate the utility of quantifying curvature along a typical analysis of morphometric data. Here, we test whether bill curvature is correlated with variation along a principal component of shape space. For this demonstration, landmark was kindly provided by Navalon et al <span class="citation">(<span class="citeproc-not-found" data-reference-id="navalon_2020"><strong>???</strong></span>)</span> — their study tested whether skull and bill morphology are integrated or decoupled phenotypes. One of the results from Navalon et al (2020, p.271) states:</p>
 <blockquote>
 <p>“We found that each of the major clades of landbirds diverged to unique cranial morphologies. Parrots (Psittaciformes) are characterized by a single ancestral shift towards very high rates of skull shape evolution, resulting in a characteristic cranial anatomy with short, curved beaks and expanded braincases.”</p>
@@ -125,9 +125,9 @@
 <p>The result is a vector of <span class="math inline">\(x\)</span> values that correspond to even increments of arc length along the polynomial. We then use the gradient (first derivatives, <span class="math inline">\(y'\)</span>) and Hessian matricies (second derivatives, <span class="math inline">\(y''\)</span>) to calculate point-wise <span class="math inline">\(\kappa_i\)</span> at every position <span class="math inline">\(x_i\)</span>:</p>
 <p><span class="math display">\[\kappa = \frac{|y''|}{(1+y'^2)^{\frac{3}{2}}}\]</span></p>
 </div>
-<div id="references" class="section level4 unnumbered">
-<h4 class="hasAnchor">
-<a href="#references" class="anchor" aria-hidden="true"></a>References</h4>
+<div class="section level4 unnumbered">
+<h4 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h4>
 <div id="refs" class="references">
 <div id="ref-adams_2013">
 <p>Adams, D.C., and Otárola-Castillo, E. (2013). Geomorph: An R package for the collection and analysis of geometric morphometric shape data. Methods in Ecology and Evolution <em>4</em>, 393–399.</p>
@@ -214,7 +214,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>
