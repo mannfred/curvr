@@ -4,7 +4,13 @@
 \alias{curvature_spline}
 \title{Calculate total curvature from smoothing or interpolating splines.}
 \usage{
-curvature_spline(landmark_matrix, x_range, type = "smooth")
+curvature_spline(
+  landmark_matrix,
+  x_range,
+  type = "smooth",
+  remove_local_K = NULL,
+  n = 100
+)
 }
 \arguments{
 \item{landmark_matrix}{is a \code{matrix} object with \code{[,1]}
@@ -19,9 +25,17 @@ calculate curvature. Concatenate the lower and upper bounds using
 smoothing spline. Uses \code{stats::spline()} or \code{stats::smooth.spline()}, respectively,
 for curve fitting and estimating the derivatives. Default is \code{type = 'smooth'}.
 See: ?spline and ?smooth.spline for details.}
+
+\item{remove_local_K}{a numeric between 0 and 1. First, local curvature will be computed `n` times across the curve.
+If any of $n_i$ exceed `remove_local_K` * total curvature, those local curvature values will be removed. Total curvature
+will then be re-calculated with local curvature anomalies removed.
+This can be useful if the spline-fitting procedures create local curvature fluctuations that are not representative of the specimen.}
+
+\item{n}{number of times to compute local curvature for `remove_local_K`. Default is `n=100`.}
 }
 \value{
-a numeric indicating the total curvature in radians.
+a `list` with three named elements. `$Ktot` is the total curvature in radians. `$Ktot_remove_local` is total curvature with
+local curvature fluctuations removed, as defined by the user. `$Ki` is a numeric vector of local curvature values (length is `n` as defined by the user).
 }
 \description{
 Calculate total curvature from smoothing or interpolating splines.
@@ -34,6 +48,6 @@ y <- sqrt(1-x^2)
 mdat <- matrix(c(x, y), nrow = 101, ncol = 2)
 
 # total curvature between x=0 and x=sqrt(2)/2 should be approximately pi/4
-abs(curvature_spline(mdat, c(0, sqrt(2)/2), type='smooth'))
+abs(curvature_spline(mdat, c(0, sqrt(2)/2), type='smooth')$Ktot)
 
 }
