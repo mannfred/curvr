@@ -98,6 +98,7 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', remove_l
 
 
   # remove local curvature anomalies
+  if (x_range[2] < x_range[1]) {n <- -n}
   y <- sapply(seq(x_range[1], x_range[2], by = 1/n), k_fun)
   Ki <- diff(y)
 
