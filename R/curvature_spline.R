@@ -14,15 +14,7 @@
 #' for curve fitting and estimating the derivatives. Default is \code{type = 'smooth'}.
 #' See: ?spline and ?smooth.spline for details.
 #'
-#' @param remove_local_K a numeric between 0 and 1. First, local curvature will be computed `n` times across the curve.
-#' If any of $n_i$ exceed `remove_local_K` * total curvature, those local curvature values will be removed. Total curvature
-#' will then be re-calculated with local curvature anomalies removed.
-#' This can be useful if the spline-fitting procedures create local curvature fluctuations that are not representative of the specimen.
-#'
-#' @param n number of times to compute local curvature for `remove_local_K`. Default is `n=100`.
-#'
-#' @return a `list` with three named elements. `$Ktot` is the total curvature in radians. `$Ktot_remove_local` is total curvature with
-#' local curvature fluctuations removed, as defined by the user. `$Ki` is a numeric vector of local curvature values (length is `n` as defined by the user).
+#' @return a `list` with two named elements. `$Ktot` is the total curvature in radians. `$Ki` is a numeric vector of local curvature values.
 #'
 #' @examples
 #'
@@ -39,7 +31,7 @@
 #'
 #' @export
 
-curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', remove_local_K=NULL, n=100) {
+curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
 
   # extract/separate x and y coords
   x_coords <- landmark_matrix[, 1]
@@ -96,19 +88,10 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', remove_l
   # compute integral of K*ds
   Ktot <- integrate(k_fun, lower = x_range[1], upper = x_range[2])$value
 
+  # compute point-wise K from second deriv function
+  Ki <- s2func(landmark_matrix[,1])
 
-  # remove local curvature anomalies
-  if (x_range[2] < x_range[1]) {n <- -n}
-  y <- sapply(seq(x_range[1], x_range[2], by = 1/n), k_fun)
-  Ki <- diff(y)
-
-  if (is.null(remove_local_K) == FALSE) {
-    for (i in 1:length(Ki)) {
-      if (abs(Ki[i]) > abs(remove_local_K*Ktot)) {Ki[i] <- 0}
-      else {Ki[i] <- Ki[i]}
-    }
-  }
-
-  curvature <- list(Ktot = Ktot, Ktot_remove_local = sum(Ki), Ki = Ki )
+  curvature <- list(Ktot = Ktot, Ki = Ki)
   return(curvature)
+
 }
