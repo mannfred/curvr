@@ -28,45 +28,41 @@ curvature_circlefit <- function(landmark_matrix, x_range) {
   k <- round(fitted_circle[2], digits = 3) # y coordinate of centre
   r <- round(fitted_circle[3], digits = 3) # radius of fitted circle
 
-  # use x-coordinate from `x_range` to determine where on the circle to calculate curvature
-  # if (x-h)^2 + (y-k)^2 = r^2 then
-  # y^2 -2ky + k^2 - (r^2 - (x-h)^2) = 0, solve for quadratic
-  a <- 1
-  b <- -2*k
-  c1 <- k^2 - r^2 + (x_range[1]-h)^2
-  c2 <- k^2 - r^2 + (x_range[2]-h)^2
+  # generate points that lie on the fitted circle
+  theta <- seq(0, 2 * pi, length = 1000)
+  cx <- r * cos(theta) + h
+  cy <- r * sin(theta) + k
+  cpoints <- cbind(cx, cy)
+  # plot(landmark_matrix)
+  # points(x=cx,y=cy, col='blue', pch=16)
 
-  # solve quadratic equation function
-  # from https://stackoverflow.com/questions/64749481/how-to-solve-a-quadratic-equation-in-r
-  quad <- function(a, b, c)
-  {
-    a <- as.complex(a)
-    answer <- c((-b + sqrt(b^2 - 4 * a * c)) / (2 * a),
-                (-b - sqrt(b^2 - 4 * a * c)) / (2 * a))
-    if(all(Im(answer) == 0)) answer <- Re(answer)
-    if(answer[1] == answer[2]) return(answer[1])
-    answer
+  # find two points on circle that minimize distance from f(x) at x_range
+  fx_lower <- landmark_matrix[landmark_matrix == x_range[1]]
+  fx_upper <- landmark_matrix[landmark_matrix == x_range[2]]
+
+  # compute euclidian distances between curve bounds and fitted circle
+  dist_lower <- numeric()
+  for (i in 1:nrow(cpoints)) {
+  dist_lower[i] <- sqrt((cpoints[i,1] - fx_lower[1])^2 + (cpoints[i,2] - fx_lower[2])^2)
   }
 
-  # lower bound (and find solution that is closest to the graph of f(x))
-  y1 <- quad(a, b, c1)
-  y1_op <- y1[which.min(y1 - landmark_matrix[1,2])]
+  dist_upper <- numeric()
+  for (i in 1:nrow(cpoints)) {
+    dist_upper[i] <- sqrt((cpoints[i,1] - fx_upper[1])^2 + (cpoints[i,2] - fx_upper[2])^2)
+  }
 
-  # upper bound
-  y2 <- quad(a, b, c2)
-  y2_op <- y2[which.min(y2 - landmark_matrix[nrow(landmark_matrix),2])]
+  # find points on circle that minimize euclidian distances
+  clower <- cpoints[which.min(dist_lower),]
+  cupper <- cpoints[which.min(dist_upper),]
 
-  d <- sqrt(sum((c(x_range[1], y1_op) - c(x_range[2], y2_op))^2))
-  acos(1-((d^2)/(2*(r^2))))
+  # compute angle of circle segment
+  # from  https://math.stackexchange.com/questions/830413/calculating-the-arc-length-of-a-circle-segment
+  d <- sqrt((clower[1] - cupper[1])^2 + (clower[2] - cupper[2])^2)
+  Ktot <- acos(1-((d^2)/(2*(r^2))))
 
-
-
-
-  curvature <- list(Ktot = theta * (180/pi))
+  curvature <- list(Ktot = Ktot)
   return(curvature)
 }
 
-plot(x_coords, y_coords)
-theta <- seq(0, 2 * pi, length = 200)
-lines(x = r * cos(theta) + h, y = r * sin(theta) + k, col='red', lwd=3)
+
 
