@@ -1,4 +1,4 @@
-#' Calculate total curvature from a circle fitted to the landmarks
+#' Plot circle segment that has been fitted a landmark configuration
 #'
 #'
 #' @param landmark_matrix is a \code{matrix} object with \code{[,1]}
@@ -6,17 +6,24 @@
 #' the y landmark coordinates.
 #'
 #' @param x_range the lower and upper x-value bounds to
-#' calculate curvature. Concatenate the lower and upper bounds using
+#' plot the fitted circle. Concatenate the lower and upper bounds using
 #' \code{c()}, E.g. for lower = 1 and upper = 10, type \code{c(1,10)}.
 #'
+#' @param npoints a `numeric` stating how many points to sample from the fitted circle. Default is 1000.
 #'
-#' @return a `list` with one named element. `$Ktot` is the total curvature in radians.
+#' @param col a `character` string indicating the colour to plot the
+#' points from the fitted circle. Default is 'red'.
+#'
+#' @param pch a `numeric` indicating the plotting symbol to be used.
+#' Default is `1`. See ?graphics::points for details.
+#'
+#' @param ... further arguments passed to `graphics::points()`.
 #'
 #' @importFrom pracma circlefit
 #'
 #' @export
 
-curvature_circlefit <- function(landmark_matrix, x_range) {
+plot_circlefit <- function(landmark_matrix, x_range, npoints=1000, col='red', pch=1, ...) {
 
   # extract/separate x and y coords
   x_coords <- landmark_matrix[, 1]
@@ -29,12 +36,11 @@ curvature_circlefit <- function(landmark_matrix, x_range) {
   r <- round(fitted_circle[3], digits = 3) # radius of fitted circle
 
   # generate points that lie on the fitted circle
-  theta <- seq(0, 2 * pi, length = 1000)
+  theta <- seq(0, 2 * pi, length = npoints)
   cx <- r * cos(theta) + h
   cy <- r * sin(theta) + k
   cpoints <- cbind(cx, cy)
-  # plot(landmark_matrix)
-  # points(x=cx,y=cy, col='blue', pch=16)
+
 
   # find two points on circle that minimize distance from f(x) at x_range
   fx_lower <- landmark_matrix[landmark_matrix == x_range[1]]
@@ -43,7 +49,7 @@ curvature_circlefit <- function(landmark_matrix, x_range) {
   # compute euclidian distances between curve bounds and fitted circle
   dist_lower <- numeric()
   for (i in 1:nrow(cpoints)) {
-  dist_lower[i] <- sqrt((cpoints[i,1] - fx_lower[1])^2 + (cpoints[i,2] - fx_lower[2])^2)
+    dist_lower[i] <- sqrt((cpoints[i,1] - fx_lower[1])^2 + (cpoints[i,2] - fx_lower[2])^2)
   }
 
   dist_upper <- numeric()
@@ -55,14 +61,10 @@ curvature_circlefit <- function(landmark_matrix, x_range) {
   clower <- cpoints[which.min(dist_lower),]
   cupper <- cpoints[which.min(dist_upper),]
 
-  # compute angle of circle segment
-  # from  https://math.stackexchange.com/questions/830413/calculating-the-arc-length-of-a-circle-segment
-  d <- sqrt((clower[1] - cupper[1])^2 + (clower[2] - cupper[2])^2)
-  Ktot <- acos(1-((d^2)/(2*(r^2))))
+  # extract circle segment bounded by x_range
+  bounded_cpoints <- cpoints[which.min(dist_lower):which.min(dist_upper),]
 
-  curvature <- list(Ktot = Ktot)
-  return(curvature)
+  plot(landmark_matrix, pch=16)
+  points(x=cx,y=cy, col=col, pch=1, ...)
+
 }
-
-
-
