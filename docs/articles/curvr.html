@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curvr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/curvr.html">Get started</a>
 </li>
@@ -73,116 +69,344 @@
 
     
     
-<div id="abstract" class="section level4">
-<h4 class="hasAnchor">
-<a href="#abstract" class="anchor"></a>Abstract</h4>
+<div class="section level4">
+<h4 id="abstract">Abstract<a class="anchor" aria-label="anchor" href="#abstract"></a>
+</h4>
 <ol style="list-style-type: decimal">
-<li><p>Flower-pollinator curvature as viewed from the side (dorsiventral plane) has been a trait of special interest through the post-Darwin era of pollination ecology. However, within pollination ecology there are at least four metrics in use with few references to their origins or the meaning of the associated units. <span class="citation">(Boehm et al., <a href="#ref-boehm_2020" role="doc-biblioref">2020</a>)</span> recently suggested clarifying the defintion of curvature by using concepts of differential geometry.</p></li>
-<li><p>Here, we introduce an R package <code>curvr</code> for computing curvature from lines fitted to landmarked specimens. <code>curvr</code> is designed to take inputs from <code>Momocs</code>, an open-source toolkit for 2D morphometrics in R. We also outline possible advances to the curve-fitting protocol that may subsequently improve estimations of total curvature.</p></li>
+<li><p>Flower-pollinator curvature as viewed from the side (dorsiventral
+plane) has been a trait of special interest through the post-Darwinian
+era of pollination ecology. However, within pollination ecology there
+are at least four metrics in use with few references to their origins or
+the meaning of the associated units. <span class="citation">(<a href="#ref-boehm_2020">Boehm et al., 2020</a>)</span> recently suggested
+clarifying the definition of curvature by using concepts from
+differential geometry.</p></li>
+<li><p>Here, we introduce an R package <code>curvr</code> for computing
+curvature from lines fitted to landmarked specimens. <code>curvr</code>
+is designed to take inputs from <code>Momocs</code>, an open-source
+toolkit for 2D morphometrics in R. We also outline possible advances to
+the curve-fitting protocol that may subsequently improve estimations of
+total curvature.</p></li>
 <li><p>Example dataset.</p></li>
 <li>
 </ol>
 <div style="page-break-after: always;"></div>
 </div>
-<div id="introduction" class="section level4">
-<h4 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>1. Introduction</h4>
-<p>The curvature of flowers and pollinator mouthparts (eg bird bills) is a widespread trait contributing to morphological diversity in the angiosperms and their pollinators. The evolutionary ecology and history of measuring curvature in pollination ecology was recently reviewed in <span class="citation">(Boehm et al., <a href="#ref-boehm_2020" role="doc-biblioref">2020</a>)</span>. To briefly summarize; the curvature of floral tubes as viewed from the dorsiventral plane (hereafter ‘curvature’) has long been recognized as morphological feature that contributes to floral isolation <span class="citation">(sensu <span class="citeproc-not-found" data-reference-id="grant_1949"><strong>???</strong></span>)</span>. As curvature represents one of three spatial dimensions in which floral diversity can evolve (in addition to width and length), it is likely to play a role in floral diversification <span class="citation">(Kay and Sargent, <a href="#ref-kay_2009" role="doc-biblioref">2009</a>; Armbruster and Muchhala, <a href="#ref-armbruster_2009" role="doc-biblioref">2009</a>; Vamosi et al., <a href="#ref-vamosi_2018" role="doc-biblioref">2018</a>)</span>. Similarly, pollinators that specialize on curved flowers evolve curved mouthparts, contributing to morphological diversification of these clades <span class="citation">(<span class="citeproc-not-found" data-reference-id="weinstein_2017"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="maruyama_2018"><strong>???</strong></span>)</span>. Thus, flower-pollinator curvature has been of special interest to pollination ecologists, resulting in over 40 studies since the late 1970’s. Among these studies <span class="citation">(Boehm et al., <a href="#ref-boehm_2020" role="doc-biblioref">2020</a>)</span> identified four metrics for defining and quantifying curvature, in addition to the more general approach of quantifying shape via geometric morphometrics. Despite the many approaches to measuring curvature there is a lack of consensus as to what curvature means, how to interpret their units, and how varying methods could or should be compared. To this end, <span class="citation">(Boehm et al., <a href="#ref-boehm_2020" role="doc-biblioref">2020</a>)</span> proposed a revised definition of curvature that directly borrowed from the mathematical literature, including an interpretation of accompanying units.</p>
-<p>Curvature, as defined in differential geometry, is the rate of directional change of the tangent, <span class="math inline">\(\mathbf{T}\)</span>, with respect to arc length, <span class="math inline">\(s\)</span>, along the curve:</p>
-<p><span class="math display">\[\kappa = \frac{d \mathbf{T}}{ds}\]</span></p>
-<p>For a straight line, the direction of the tangent is constant and therefore, curvature is zero. For a curved line, the tangent may drastically change direction from point to point, resulting in some non-zero value of curvature. Integrating point-wise curvature gives the <em>total curvature</em> of a curve:</p>
-<p><span class="math display">\[\kappa_{total} = \int_{0}^{s_{max}} \kappa \; ds\]</span></p>
-<p>At some arbitrary point <span class="math inline">\(i\)</span>, point-curvature (<span class="math inline">\(\kappa_i\)</span>) is reported as <span class="math inline">\(degrees\)</span> per unit length. For example, if measurements have been made at every millimeter along the curve, point-wise curvature is reported as <span class="math inline">\(degrees \cdot mm^{-1}\)</span>. <em>Total curvature</em>, the sum of total tangent rotations across the length of the curve, is expressed as <span class="math inline">\(degrees\)</span>. Further techincal details can be found in <span class="citation">(Boehm et al., <a href="#ref-boehm_2020" role="doc-biblioref">2020</a>)</span> and references therein.</p>
-<p>The R package <code>curvr</code> was created to demonstrate the utility of this revised definition of curvature - it calculates point-wise curvature from curves fitted to landmarked specimens. This package is designed to work alongside common protocols in geometric morphometrics (GM) - the study of shape and its covariance with associated or causal variables <span class="citation">(Bookstein, <a href="#ref-bookstein_1991" role="doc-biblioref">1991</a>; MacLeod, <a href="#ref-macleod_2002" role="doc-biblioref">2002</a>)</span>. While relevant concepts from GM are outlined here, we recommend the concise introduction to the topic by Webster and Sheets <span class="citation">(<span class="citeproc-not-found" data-reference-id="webster_2010"><strong>???</strong></span>)</span>, and for detailed reading, Zelditch et al <span class="citation">(<span class="citeproc-not-found" data-reference-id="zelditch_2004"><strong>???</strong></span>)</span>.</p>
-<p>Geometric morphometrics aims at quantifying shape, i.e. the geometric information remaining after after specimen size, location, and orientation have been accounted for <span class="citation">(Kendall, <a href="#ref-kendall_1977" role="doc-biblioref">1977</a>; Bookstein, <a href="#ref-bookstein_1991" role="doc-biblioref">1991</a>)</span>. A typical GM protocol begins with assigning landmarks to the specimen. Landmarks are points on a specimen that are topologically or biologically homologous <span class="citation">(Bookstein, <a href="#ref-bookstein_1991" role="doc-biblioref">1991</a>)</span>. Generally, the more landmarks assigned to a specimen, the more information about its shape that has been captured. In a comparative study, landmarked specimens are scaled, translated, and rotated to remove features not contributing to shape <span class="citation">(<span class="citeproc-not-found" data-reference-id="rohlf_1990_b"><strong>???</strong></span>)</span>. In <em>outline-based</em> GM, shape functions are fit to the landmarks, for example using the tangent angle function <span class="citation">(<span class="citeproc-not-found" data-reference-id="zahn_1972"><strong>???</strong></span>)</span>. In <em>landmark-based</em> GM, the set of landmarks are taken together as a ‘landmark configuration’ and exist in a multidimensional shape space, defined by the number of landmarks used, and the spatial dimensions in which they were assigned <span class="citation">(2D or 3D, Kendall, <a href="#ref-kendall_1984" role="doc-biblioref">1984</a>)</span>. In both approaches, shape has been summarised as a single variable so that useful statistical procedures can be applied; most GM protocols involve principal components analysis (PCA) of shape variables, enabling the major axes of shape variation to be calculated and plotted in PCA ‘shape space’ <span class="citation">(MacLeod, <a href="#ref-macleod_2002" role="doc-biblioref">2002</a>)</span>.</p>
-<p>Inspection of deformation grids <span class="citation">(Bookstein, <a href="#ref-bookstein_1991" role="doc-biblioref">1991</a>)</span> or end-member specimens <span class="citation">(MacLeod, <a href="#ref-macleod_2002" role="doc-biblioref">2002</a>)</span> plotted onto these axes are suggestive of the geometric features contributing to shape variation (e.g. curvature). The role of <code>curvr</code> is to re-purpose the landmark assignments used in the GM analysis to calculate <em>total curvature</em> from each specimen. By explicitly quantifying curvature, the investigator can empircally test the contribution of curvature to shape variation along some principal axis of interest. In the following section the algorithims for computing point-wise curvature are described, followed by a demonstration of its utility alongside a typical GM analysis.</p>
+<div class="section level4">
+<h4 id="introduction">1. Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h4>
+<p>The curvature of flowers and pollinator mouthparts (e.g. bird bills)
+is a widespread trait contributing to morphological diversity in the
+angiosperms and their pollinators. The evolutionary ecology and history
+of measuring curvature in pollination ecology was recently reviewed in
+<span class="citation">(<a href="#ref-boehm_2021"><strong>boehm_2021?</strong></a>)</span>. To
+briefly summarize; the curvature of floral tubes as viewed from the
+dorsiventral plane (hereafter ‘curvature’) has long been recognized as
+morphological feature that contributes to floral isolation <span class="citation">(sensu <a href="#ref-grant_1949">Grant,
+1949</a>)</span>. As curvature represents one of three spatial
+dimensions through which floral morphology can evolve (in addition to
+width and length), it is likely to play a role in floral diversification
+<span class="citation">(<a href="#ref-kay_2009">Kay and Sargent,
+2009</a>; <a href="#ref-armbruster_2009">Armbruster and Muchhala,
+2009</a>; <a href="#ref-vamosi_2018">Vamosi et al., 2018</a>)</span>.
+Similarly, pollinators that specialize on curved flowers evolve curved
+mouthparts, contributing to morphological diversification of these
+clades <span class="citation">(<a href="#ref-weinstein_2017">Weinstein
+and Graham, 2017</a>; <a href="#ref-maruyama_2018">Maruyama et al.,
+2018</a>)</span>. Thus, flower-pollinator curvature has been of special
+interest to pollination ecologists, resulting in over 40 studies since
+the late 1970’s <span class="citation">(<a href="#ref-boehm_2021"><strong>boehm_2021?</strong></a>)</span>. Among
+these studies, Boehm et al. <span class="citation">(<a href="#ref-boehm_2021"><strong>boehm_2021?</strong></a>)</span>
+identified four metrics for defining and quantifying curvature, in
+addition to the more general approach of quantifying shape via geometric
+morphometrics. Despite the many approaches to measuring curvature there
+is a lack of consensus as to what curvature means, how to interpret
+their units, and how varying methods could or should be compared. To
+this end, <span class="citation">(<a href="#ref-boehm_2021"><strong>boehm_2021?</strong></a>)</span> proposed
+a revised definition of curvature that directly borrowed from the
+mathematical literature, including an interpretation of accompanying
+units.</p>
+<p>Curvature, as defined in differential geometry, is the rate of change
+of the tangent, <span class="math inline">\(\mathbf{T}\)</span>, with
+respect to arc length, <span class="math inline">\(s\)</span>, along the
+curve:</p>
+<p><span class="math display">\[\kappa = \frac{d
+\mathbf{T}}{ds}\]</span></p>
+<p>When the angle, <span class="math inline">\(\phi\)</span> of <span class="math inline">\(\mathbf{T}\)</span> is related to an axis of
+reference (e.g. the <span class="math inline">\(x\)</span> axis),
+curvature can be expressed as:</p>
+<p><span class="math display">\[\kappa = \frac{d\phi}{ds}\]</span></p>
+<p>For a straight line, the direction of the tangent is constant and
+therefore, curvature is zero. For a curved line, the tangent vector
+<span class="math inline">\(\mathbf{T}\)</span> changes direction from
+point to point, resulting in some non-zero value of curvature.
+Integrating point-wise curvature gives the <em>total curvature</em>
+<span class="citation">(<a href="#ref-milnor_1954">Milnor,
+1954</a>)</span> of a curve:</p>
+<p><span class="math display">\[\kappa_{total} = \int_{0}^{s_{max}}
+\kappa \; ds\]</span></p>
+<p>At some arbitrary point <span class="math inline">\(i\)</span>,
+point-curvature (<span class="math inline">\(\kappa_i\)</span>) is
+reported as <span class="math inline">\(radians\)</span> per unit
+length. For example, if measurements have been made at every millimeter
+along the curve, point-wise curvature is reported as <span class="math inline">\(radians \cdot mm^{-1}\)</span>. <em>Total
+curvature</em>, the sum of total tangent rotations across the length of
+the curve, is expressed as <span class="math inline">\(radians\)</span>.
+Converting curvature measurements to <span class="math inline">\(degrees\)</span> can be done by multiplying the
+radian measure by <span class="math inline">\(180\
+degrees/\pi\)</span>.</p>
+<p>The R package <code>curvr</code> was created to allow this definition
+of curvature to be applied in pollination ecology, and any other system
+that requires the measurement of 2-D curvature. This package is designed
+to work alongside common protocols in geometric morphometrics (GM), the
+study of shape and its covariance with associated or causal variables
+<span class="citation">(<a href="#ref-bookstein_1991">Bookstein,
+1991</a>; <a href="#ref-macleod_2002">MacLeod, 2002</a>)</span>. While
+relevant concepts from GM are outlined here, we recommend the concise
+introduction to the topic by Webster and Sheets <span class="citation">(<a href="#ref-webster_2010">2010</a>)</span>, and for
+detailed reading, Zelditch et al <span class="citation">(<a href="#ref-zelditch_2012">2012</a>)</span>.</p>
+<p>Geometric morphometrics aims at quantifying shape, i.e. the geometric
+information remaining after after specimen size, location, and
+orientation have been accounted for <span class="citation">(<a href="#ref-kendall_1977">Kendall, 1977</a>; <a href="#ref-bookstein_1991">Bookstein, 1991</a>)</span>. A typical GM
+protocol begins with assigning landmarks to the specimen. Landmarks are
+points on a specimen that are topologically or biologically homologous
+<span class="citation">(<a href="#ref-bookstein_1991">Bookstein,
+1991</a>)</span>. Generally, the more landmarks assigned to a specimen,
+the more information about its shape that has been captured. In a
+comparative study, landmarked specimens are scaled, translated, and
+rotated to remove features not contributing to shape <span class="citation">(<a href="#ref-rohlf_1990_b">Rohlf and Slice,
+1990</a>)</span>. In <em>outline-based</em> GM, shape functions are fit
+to the landmarks, for example using the tangent angle function <span class="citation">(<a href="#ref-zahn_1972">Zahn and Roskies,
+1972</a>)</span>. In <em>landmark-based</em> GM, the set of landmarks
+are taken together as a ‘landmark configuration’ and exist in a
+multidimensional shape space, defined by the number of landmarks used,
+and the spatial dimensions in which they were assigned <span class="citation">(2D or 3D, <a href="#ref-kendall_1984">Kendall,
+1984</a>)</span>. In both approaches, shape has been summarised as a
+single variable so that useful statistical procedures can be applied;
+most GM protocols involve principal components analysis (PCA) of shape
+variables, enabling the major axes of shape variation to be calculated
+and plotted in PCA ‘shape space’ <span class="citation">(<a href="#ref-macleod_2002">MacLeod, 2002</a>)</span>.</p>
+<p>Inspection of deformation grids <span class="citation">(<a href="#ref-bookstein_1991">Bookstein, 1991</a>)</span> or end-member
+specimens <span class="citation">(<a href="#ref-macleod_2002">MacLeod,
+2002</a>)</span> plotted onto these axes are suggestive of the geometric
+features contributing to shape variation (e.g. curvature). The role of
+<code>curvr</code> is to re-purpose the landmark assignments used in the
+GM analysis to calculate <em>total curvature</em> from each specimen. By
+explicitly quantifying curvature, the investigator can explicitly test
+the contribution of curvature to shape variation along some principal
+axis of interest. In the following section the algorithms for computing
+total curvature are described, followed by a demonstration of its
+utility alongside a typical GM analysis.</p>
 <div style="page-break-after: always;"></div>
 </div>
-<div id="the-curvr-package" class="section level4">
-<h4 class="hasAnchor">
-<a href="#the-curvr-package" class="anchor"></a>2. The <code>curvr</code> package</h4>
-<p>Computing point-wise and total curvature necessitates fitting a curve to the specimen of interest. Fortunately, the landmarks used in a GM protocol can be re-purposed for regressing curves to the specimen. However, in GM, landmarks are placed throughout the entire specimen to quantify shape. Quantifying curvature typically implies a segment of the shape that is of particular interest <span class="citation">(but see: Silk and Erickson, <a href="#ref-silk_1978" role="doc-biblioref">1978</a>)</span>, therefore the landmarks used for curvature analysis will be a subset of those used in the GM protocol.</p>
-<p>The <code>curvr</code> package can be used alongside a typical GM protocol where specimens have been digitally landmarked using eg tpsDig <span class="citation">(Rohlf, <a href="#ref-rohlf_2015" role="doc-biblioref">2015</a>)</span>, <code>Momocs</code> <span class="citation">(Bonhomme et al., <a href="#ref-bonhomme_2014" role="doc-biblioref">2014</a>)</span>, or <code>geomorph</code> <span class="citation">(<span class="citeproc-not-found" data-reference-id="adams_2013"><strong>???</strong></span>)</span>. Landmarked specimens with <span class="math inline">\(xy\)</span> coordinates can then be fitted with polynomial curves using <code><a href="https://rdrr.io/pkg/Momocs/man/npoly.html">Momocs::npoly.Opn</a></code> or <code><a href="https://rdrr.io/pkg/Momocs/man/opoly.html">Momocs::opoly.Opn</a></code>. The output of either function is a list-object with the first element containing the polynomial coefficients in ascending order of degrees (note that <code><a href="https://rdrr.io/pkg/Momocs/man/npoly.html">Momocs::npoly.default()</a></code> creates an <code>OpnCoe</code> object - currently, <code>curvr</code> is not designed to handle this object class). <code><a href="../reference/total_curvature.html">curvr::total_curvature</a></code> takes the polynomial <code>list</code> object(s) as input, extracts the coefficients and constructs an expression that is passed to <code><a href="https://rdrr.io/r/stats/deriv.html">stats::deriv3</a></code> for computing first and second derivatives. Before point-wise curvature is estimated from the derivatives, the polynomial function is parameterized by arc length. The advantage of this step is that curvature can be calculated at even increments of arc length, <span class="math inline">\(s\)</span>. The polynomial is parameterized by arc length by first splitting the curve into sub-curves of incrementally increasing proportions of total length, from 0 to 1. For example, a curve split into 10 parts would have 10 sub-curves with arc length calculated as <span class="math inline">\(0.1(s)\)</span>, <span class="math inline">\(0.2(s)\)</span>, …, <span class="math inline">\(1.0(s)\)</span>. Each sub-curve has a lower <span class="math inline">\(x\)</span> bound of known value (the lower bound of the original polynomial). The upper <span class="math inline">\(x\)</span> bound (of each sub-surve) is unknown. The root-finding function <code><a href="https://rdrr.io/r/stats/uniroot.html">stats::uniroot</a></code> solves for the unknown upper <span class="math inline">\(x_i\)</span> value, <span class="math inline">\(u_i\)</span>, for each <span class="math inline">\(i\)</span> sub-curve:</p>
+<div class="section level4">
+<h4 id="the-curvr-package">2. The <code>curvr</code> package<a class="anchor" aria-label="anchor" href="#the-curvr-package"></a>
+</h4>
+<p>Computing total curvature necessitates fitting a curve to the
+specimen of interest. Fortunately, the landmarks used in a GM protocol
+can be re-purposed for regressing curves to the specimen. However, in
+GM, landmarks are placed throughout the entire specimen to quantify
+shape. Quantifying curvature typically implies a segment of the shape
+that is of particular interest <span class="citation">(but see: <a href="#ref-silk_1978">Silk and Erickson, 1978</a>)</span>, therefore the
+landmarks used for curvature analysis will be a subset of those used in
+the GM protocol.</p>
+<p>The <code>curvr</code> package can be used alongside a typical GM
+protocol where specimens have been digitally landmarked, e.g. using
+tpsDig <span class="citation">(<a href="#ref-rohlf_2015">Rohlf,
+2015</a>)</span>, <code>Momocs</code> <span class="citation">(<a href="#ref-bonhomme_2014">Bonhomme et al., 2014</a>)</span>, or
+<code>geomorph</code> <span class="citation">(<a href="#ref-adams_2013">Adams and Otárola-Castillo, 2013</a>)</span>.
+Once a set of specimens have been landmarked, the corresponding files
+can be imported into R using e.g. <code><a href="https://rdrr.io/pkg/geomorph/man/readland.tps.html" class="external-link">geomorph::readland.tps()</a></code>.
+For open curves, we recommend rotating so that the longest axis of the
+shape is parallel to the x-axis, so that single-valued functions (SVF)
+can be fit &amp;emdash; this can be done with
+<code><a href="https://rdrr.io/pkg/Momocs/man/coo_alignxax.html" class="external-link">Momocs::coo_alignxax()</a></code>. Total curvature can then be
+computed using <code><a href="../reference/curvature_spline.html">curvr::curvature_spline()</a></code>. This function
+takes three arguments: the first is the <code>matrix</code> object
+containing the landmark data, the second is the upper and lower bounds
+of the curve from which to estimate curvature, and the third is the type
+of spline to fit to the landmarks.</p>
+<p>Since GM practitioners will be well-versed in handling landmark
+matricies, we will focus on the latter two arguments. The
+<code>x_range</code> argument will, in most cases, be a numeric vector
+of the first and last x-axis landmark of the specimen. If handling
+multiple specimens, we recommend extracting these boundaries and storing
+in a <code>list</code>. Deciding on the <code>type</code> argument will
+vary between systems. Two options are available: <code>smooth</code>
+(smoothing) and <code>ip</code> (interpolating). Perperoglou et al.
+<span class="citation">(<a href="#ref-perperoglou_2019"><strong>perperoglou_2019?</strong></a>)</span>
+recently reviewed spline fitting procedures in R, and we recommend this
+primer to assess which is appropriate for the study system at hand.</p>
+<p>The <code><a href="../reference/curvature_spline.html">curvature_spline()</a></code> function first takes the landmark
+matrix and fits a spline via <code><a href="https://rdrr.io/r/stats/smooth.spline.html" class="external-link">stats::smooth.spline()</a></code> or
+<code><a href="https://rdrr.io/r/stats/splinefun.html" class="external-link">stats::spline()</a></code>. From these splines, the first and second
+derivatives are computed and stored as functions using
+<code><a href="https://rdrr.io/r/stats/splinefun.html" class="external-link">stats::splinefun()</a></code> with the appropriate <code>deriv</code>
+argument.</p>
+<p>A function for point-wise curvature <span class="math inline">\(\kappa_i\)</span> is then constructed as:</p>
+<p><span class="math display">\[\kappa_i =
+\frac{\lvert{y_i''}\rvert} {(1 + y_i'^2)^{3/2}}\]</span>
+Which is curvature at <span class="math inline">\(x=i\)</span> for a
+single-valued function <span class="math inline">\(y=f(x)\)</span> <span class="citation">(<a href="#ref-huber_2008">Huber and Hanke, 2008</a>;
+<a href="#ref-rutter_2000">Rutter, 2000</a>)</span>. The arc-length
+segment <span class="math inline">\(ds_i\)</span> is simply:</p>
+<p><span class="math display">\[ds_i = \sqrt{1^2 +
+{y'_i}^2}\]</span></p>
+<p>These two equations are assigned to functions using the Hessian and
+gradient functions constructed above, and passed to
+<code><a href="https://rdrr.io/r/stats/integrate.html" class="external-link">stats::integrate()</a></code> to calculate total curvature:</p>
+<p><span class="math display">\[\kappa_{total} = \int_{i=0}^{i=s_{max}}
+\frac{\lvert{y_i''}\rvert} {(1 + y_i'^2)^{3/2}} \ \
+\sqrt{1^2 + {y'_i}^2}= \int_{0}^{s_{max}} \kappa \; ds\]</span></p>
+<!-- Similarly, the `curvr::curvature_tangle()` function also implements spline-fitting to estimate total curvature. However, this function differs in that FMM splines [@forsythe_1977] are used to interpolate points between the landmarks submitted by the user. Together, the original landmarks and the interpolated points are used to estimate changes in the tangent angle (equation 1) across the curve [@boehm_2021]. This approach is equivalent to taking the derivative of the tangent angle function [@zahn_1972] as implemented in R by Claude [-@claude_2008]. Total curvature is estimated by integrating $\frac{d\phi}{ds}$ as in equation 2. -->
+<p> </p>
+</div>
+<div class="section level4">
+<h4 id="applications">3. Applications<a class="anchor" aria-label="anchor" href="#applications"></a>
+</h4>
+<p>In this section, we illustrate the utility of quantifying curvature
+along a typical analysis of morphometric data. Here, we test whether
+bill curvature is correlated with variation along a principal component
+of shape space. For this demonstration, landmark was kindly provided by
+Navalon et al <span class="citation">(<a href="#ref-navalon_2020"><strong>navalon_2020?</strong></a>)</span> —
+their study tested whether skull and bill morphology are integrated or
+decoupled phenotypes. One of the results from Navalon et al (2020,
+p.271) states:</p>
+<blockquote>
+<p>“We found that each of the major clades of landbirds diverged to
+unique cranial morphologies. Parrots (Psittaciformes) are characterized
+by a single ancestral shift towards very high rates of skull shape
+evolution, resulting in a characteristic cranial anatomy with short,
+curved beaks and expanded braincases.”</p>
+</blockquote>
+<p>short: <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13385" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13385</a>
+<a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293" class="external-link uri">https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293</a></p>
+<p>pgs 184, 186o <a href="https://ebookcentral.proquest.com/lib/ubc/reader.action?docID=422384&amp;ppg=18" class="external-link uri">https://ebookcentral.proquest.com/lib/ubc/reader.action?docID=422384&amp;ppg=18</a></p>
+<p>Before point-wise curvature is estimated from the derivatives, the
+polynomial function is parameterized by arc length. The advantage of
+this step is that curvature can be calculated at even increments of arc
+length, <span class="math inline">\(s\)</span>. The polynomial is
+parameterized by arc length by first splitting the curve into sub-curves
+of incrementally increasing proportions of total length, from 0 to 1.
+For example, a curve split into 10 parts would have 10 sub-curves with
+arc length calculated as <span class="math inline">\(0.1(s)\)</span>,
+<span class="math inline">\(0.2(s)\)</span>, …, <span class="math inline">\(1.0(s)\)</span>. Each sub-curve has a lower <span class="math inline">\(x\)</span> bound of known value (the lower bound
+of the original polynomial). The upper <span class="math inline">\(x\)</span> bound (of each sub-surve) is unknown.
+The root-finding function <code><a href="https://rdrr.io/r/stats/uniroot.html" class="external-link">stats::uniroot</a></code> solves for the
+unknown upper <span class="math inline">\(x_i\)</span> value, <span class="math inline">\(u_i\)</span>, for each <span class="math inline">\(i\)</span> sub-curve:</p>
 <p><code>f(u) = pracma::arclength(polynomial, lower x boundary, u)$length</code></p>
-<p>The result is a vector of <span class="math inline">\(x\)</span> values that correspond to even increments of arc length along the polynomial. We then use the gradient (first derivatives, <span class="math inline">\(y'\)</span>) and Hessian matricies (second derivatives, <span class="math inline">\(y''\)</span>) to calculate point-wise <span class="math inline">\(\kappa_i\)</span> at every position <span class="math inline">\(x_i\)</span>:</p>
-<p><span class="math display">\[\kappa = \frac{|y''|}{(1+y'^2)^{\frac{3}{2}}}\]</span></p>
-<p>Although written differently than the equation for curvature stated in the introduction, this definition is equivalent.</p>
-<p>Finally, the point-wise curvature measurements are summed and converted from radians to degrees. The output of <code><a href="../reference/total_curvature.html">curvr::total_curvature()</a></code> is <em>total curvature</em> as defined above.</p>
-<p>Before submitting <code>Momocs</code> polynomials to <code>curvr</code>, the user first needs to inspect their list-object and extract the lower and upper <span class="math inline">\(x\)</span> bounds of their polynomial (coming soon to Vignettes). These bounds are entered as the <code>x_range</code> parameter of <code><a href="../reference/total_curvature.html">curvr::total_curvature()</a></code>. Additionally, the user needs to specify the number of subdivisions made to their curve(s). Greater subdivisions more completely sample the curve, but increases computing time. It is recommended to use subdivisions on the order of 800 or greater.</p>
-<p>In its current form, <code>curvr</code> accepts outputs from the R package <code>Momocs</code> <span class="citation">(Bonhomme et al., <a href="#ref-bonhomme_2014" role="doc-biblioref">2014</a>)</span>, specifically polynomial objects fitted to landmarked specimens. Because polynomials will often miss local curvature features, the incoming version of <code>curvr</code> will adopt more sophisticated curve-fitting procedures from the field of outline-based morphometrics (discussed further in final section).</p>
+<p>The result is a vector of <span class="math inline">\(x\)</span>
+values that correspond to even increments of arc length along the
+polynomial. We then use the gradient (first derivatives, <span class="math inline">\(y'\)</span>) and Hessian matricies (second
+derivatives, <span class="math inline">\(y''\)</span>) to
+calculate point-wise <span class="math inline">\(\kappa_i\)</span> at
+every position <span class="math inline">\(x_i\)</span>:</p>
+<p><span class="math display">\[\kappa =
+\frac{|y''|}{(1+y'^2)^{\frac{3}{2}}}\]</span></p>
 </div>
-<div id="applications" class="section level4">
-<h4 class="hasAnchor">
-<a href="#applications" class="anchor"></a>3. Applications</h4>
-<p>In this section, we will illustrate the utility of quantifying curvature along a typical analysis of morphometric data. Here, we will test whether bill curvature is correlated with variation along a principal component of shape space. Morphometric has been kindly provided by Navalon et al (2020) - their study examined skull and bill morphology as integrated or decoupled phenotypes. One of the results from Navalon et al (2020, p.17) states:</p>
-<p>-Recreate GM analysis -complement with curvature analysis</p>
-<p>Section: shortcoming of using polynomials. Suggest alternate methods. Table 1. Functions available in <code>curvr</code> version 0.1.0 for computing point-wise curvature</p>
-<p>Columns: Function, Method, Reference</p>
-<p>In GM analyses,</p>
-<p>We recommend using at least 800 subdivisions:</p>
-<pre><code>x &lt;- 1:10
-y &lt;- x^2
-mdat &lt;- matrix(c(x,y), nrow=10, ncol=2)
-my_poly &lt;- Momocs::npoly(mdat, 2)
-  
-K5     &lt;- totalK(c(0,1), my_poly, 5)
-K20    &lt;- totalK(c(0,1), my_poly, 20)
-K50    &lt;- totalK(c(0,1), my_poly, 50)
-K200   &lt;- totalK(c(0,1), my_poly, 200)
-K800   &lt;- totalK(c(0,1), my_poly, 800)
-K2000  &lt;- totalK(c(0,1), my_poly, 2000)
-K10000 &lt;- totalK(c(0,1), my_poly, 10000)
-
-subdiv &lt;- c(5, 20, 50, 200, 800, 2000, 10000)
-K_values &lt;- c(55.34299, 46.00986, 44.1399, 43.20422, 42.97015, 42.92333, 42.89837)
-
-sub_vs_K &lt;- matrix(nrow=7, ncol=2)
-sub_vs_K[,1] &lt;- subdiv
-sub_vs_K[,2] &lt;- K_values
-
-sK_tbl &lt;- as_tibble(sub_vs_K)
-ggplot(data=sK_tbl, aes(V1, V2)) + geom_point()
-
-</code></pre>
-<p>example short: <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13385" class="uri">https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13385</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293" class="uri">https://besjournals.onlinelibrary.wiley.com/doi/epdf/10.1111/2041-210X.13293</a></p>
-<p>pgs 184, 186o <a href="https://ebookcentral.proquest.com/lib/ubc/reader.action?docID=422384&amp;ppg=18" class="uri">https://ebookcentral.proquest.com/lib/ubc/reader.action?docID=422384&amp;ppg=18</a></p>
+<div class="section level4 unnumbered">
+<h4 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h4>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-adams_2013" class="csl-entry">
+Adams, D.C., and Otárola-Castillo, E. (2013). Geomorph: An
+<span>R</span> package for the collection and analysis of geometric
+morphometric shape data. Methods in Ecology and Evolution <em>4</em>,
+393–399.
 </div>
-<div id="references" class="section level4 unnumbered">
-<h4 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h4>
-<div id="refs" class="references">
-<div id="ref-armbruster_2009">
-<p>Armbruster, W.S., and Muchhala, N. (2009). Associations between floral specialization and species diversity: Cause, effect, or correlation? Evolutionary Ecology <em>23</em>, 159–179.</p>
+<div id="ref-armbruster_2009" class="csl-entry">
+Armbruster, W.S., and Muchhala, N. (2009). Associations between floral
+specialization and species diversity: Cause, effect, or correlation?
+Evolutionary Ecology <em>23</em>, 159–179.
 </div>
-<div id="ref-boehm_2020">
-<p>Boehm, M.M.A., Jankowski, J.E., and Cronk, Q.C.B. (2020). Plant-pollinator specialization: Origin and measurement of curvature. bioRxiv <em>NA</em>.</p>
+<div id="ref-boehm_2020" class="csl-entry">
+Boehm, M.M.A., Jankowski, J.E., and Cronk, Q.C.B. (2020).
+Plant-pollinator specialization: Origin and measurement of curvature.
+bioRxiv <em>NA</em>.
 </div>
-<div id="ref-bonhomme_2014">
-<p>Bonhomme, V., Picq, S., Gaucherel, C., and Claude, J. (2014). Momocs: Outline analysis using R. Journal of Statistical Software <em>56</em>, 1–24.</p>
+<div id="ref-bonhomme_2014" class="csl-entry">
+Bonhomme, V., Picq, S., Gaucherel, C., and Claude, J. (2014). <a href="http://www.jstatsoft.org/v56/i13/" class="external-link">Momocs: Outline analysis using
+<span>R</span></a>. Journal of Statistical Software <em>56</em>, 1–24.
 </div>
-<div id="ref-bookstein_1991">
-<p>Bookstein, F.L. (1991). Morphometric tools for landmark data: geometry and biology (Cambridge University Press).</p>
+<div id="ref-bookstein_1991" class="csl-entry">
+Bookstein, F.L. (1991). Morphometric <span class="nocase">t</span>ools
+for <span class="nocase">l</span>andmark <span class="nocase">d</span>ata: <span class="nocase">g</span>eometry and
+<span class="nocase">b</span>iology (Cambridge University Press).
 </div>
-<div id="ref-kay_2009">
-<p>Kay, K.M., and Sargent, R.D. (2009). The role of animal pollination in plant speciation: Integrating ecology, geography, and genetics. Annual Review of Ecology, Evolution, and Systematics <em>40</em>, 637–656.</p>
+<div id="ref-grant_1949" class="csl-entry">
+Grant, V. (1949). Pollination systems as isolating mechanisms in
+angiosperms. Evolution <em>3</em>, 82–97.
 </div>
-<div id="ref-kendall_1977">
-<p>Kendall, D.G. (1977). The diffusion of shape. Advances in Applied Probability <em>9</em>, 428–430.</p>
+<div id="ref-huber_2008" class="csl-entry">
+Huber, S., and Hanke, M. (2008). Curvature, not second derivative.
+Mathematical Spectrum <em>41</em>, 57–60.
 </div>
-<div id="ref-kendall_1984">
-<p>Kendall, D.G. (1984). Shape manifolds, Procrustean metrics, and complex projective spaces. Bulletin of the London Mathematical Society <em>16</em>, 81–121.</p>
+<div id="ref-kay_2009" class="csl-entry">
+Kay, K.M., and Sargent, R.D. (2009). The role of animal pollination in
+plant speciation: Integrating ecology, geography, and genetics. Annual
+Review of Ecology, Evolution, and Systematics <em>40</em>, 637–656.
 </div>
-<div id="ref-macleod_2002">
-<p>MacLeod, N. (2002). Geometric morphometrics and geological shape-classification systems. Earth-Science Reviews <em>59</em>, 27–47.</p>
+<div id="ref-kendall_1977" class="csl-entry">
+Kendall, D.G. (1977). The diffusion of shape. Advances in Applied
+Probability <em>9</em>, 428–430.
 </div>
-<div id="ref-rohlf_2015">
-<p>Rohlf, F.J. (2015). The tps series of software. Hystrix <em>26</em>.</p>
+<div id="ref-kendall_1984" class="csl-entry">
+Kendall, D.G. (1984). Shape manifolds, <span>P</span>rocrustean metrics,
+and complex projective spaces. Bulletin of the London Mathematical
+Society <em>16</em>, 81–121.
 </div>
-<div id="ref-silk_1978">
-<p>Silk, W.K., and Erickson, R.O. (1978). Kinematics of hypocotyl curvature. American Journal of Botany <em>65</em>, 310–319.</p>
+<div id="ref-macleod_2002" class="csl-entry">
+MacLeod, N. (2002). Geometric morphometrics and geological
+shape-classification systems. Earth-Science Reviews <em>59</em>, 27–47.
 </div>
-<div id="ref-vamosi_2018">
-<p>Vamosi, J.C., Magallón, S., Mayrose, I., Otto, S.P., and Sauquet, H. (2018). Macroevolutionary patterns of flowering plant speciation and extinction. Annual Review of Plant Biology <em>69</em>, 685–706.</p>
+<div id="ref-maruyama_2018" class="csl-entry">
+Maruyama, P.K., Sonne, J., Vizentin-Bugoni, J., Martı́n González, A.M.,
+Zanata, T.B., Abrahamczyk, S., Alarcón, R., Araujo, A.C., Araújo, F.P.,
+Baquero, A.C., et al. (2018). Functional diversity mediates
+macroecological variation in plant–hummingbird interaction networks.
+Global Ecology and Biogeography <em>27</em>, 1186–1199.
+</div>
+<div id="ref-milnor_1954" class="csl-entry">
+Milnor, J. (1954). On total curvatures of closed space curves.
+Mathematica Scandinavica <em>1</em>, 289–296.
+</div>
+<div id="ref-rohlf_2015" class="csl-entry">
+Rohlf, F.J. (2015). The tps series of software. Hystrix <em>26</em>.
+</div>
+<div id="ref-rohlf_1990_b" class="csl-entry">
+Rohlf, F., and Slice, D. (1990). Extensions of the
+<span>P</span>rocrustes method for optimal superposition of landmarks.
+Systematic Zoology <em>39</em>, 40–59.
+</div>
+<div id="ref-rutter_2000" class="csl-entry">
+Rutter, J.W. (2000). Geometry of <span>C</span>urves (Boca Raton, FL:
+CRC Press, Taylor; Francis Group).
+</div>
+<div id="ref-silk_1978" class="csl-entry">
+Silk, W.K., and Erickson, R.O. (1978). Kinematics of hypocotyl
+curvature. American Journal of Botany <em>65</em>, 310–319.
+</div>
+<div id="ref-vamosi_2018" class="csl-entry">
+Vamosi, J.C., Magallón, S., Mayrose, I., Otto, S.P., and Sauquet, H.
+(2018). Macroevolutionary patterns of flowering plant speciation and
+extinction. Annual Review of Plant Biology <em>69</em>, 685–706.
+</div>
+<div id="ref-webster_2010" class="csl-entry">
+Webster, M., and Sheets, H.D. (2010). A practical introduction to
+landmark-based geometric morphometrics. The Paleontological Society
+Papers <em>16</em>, 163–188.
+</div>
+<div id="ref-weinstein_2017" class="csl-entry">
+Weinstein, B.G., and Graham, C.H. (2017). Persistent bill and corolla
+matching despite shifting temporal resources in tropical
+hummingbird-plant interactions. Ecology Letters <em>20</em>, 326–335.
+</div>
+<div id="ref-zahn_1972" class="csl-entry">
+Zahn, C.T., and Roskies, R.Z. (1972). Fourier descriptors for plane
+closed curves. IEEE Transactions on Computers <em>100</em>, 269–281.
+</div>
+<div id="ref-zelditch_2012" class="csl-entry">
+Zelditch, M.L., Swiderski, D.L., and Sheets, H.D. (2012). Geometric
+morphometrics for biologists: A primer (academic press).
 </div>
 </div>
 </div>
@@ -197,11 +421,13 @@ ggplot(data=sK_tbl, aes(V1, V2)) + geom_point()
 
 
       <footer><div class="copyright">
-  <p>Developed by Mannfred Masahiro Asada Boehm.</p>
+  <p></p>
+<p>Developed by Mannfred Masahiro Asada Boehm.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -209,6 +435,8 @@ ggplot(data=sK_tbl, aes(V1, V2)) + geom_point()
 
   
 
+
+  
 
   </body>
 </html>
