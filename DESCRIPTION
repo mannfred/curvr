@@ -18,5 +18,5 @@ Suggests:
     knitr (>= 1.39),
     rmarkdown (>= 2.14),
     testthat (>= 3.1.4)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
