@@ -11,7 +11,7 @@ citEntry(entry = "Article",
   url          = "",
 
   textVersion  =
-  paste("Mannfred M.A. Boehm (2020).",
+  paste("Mannfred M.A. Boehm (2021).",
         "curvr: an R package for measuring total curvature from landmarked specimens.",
         "https://github.com/mannfred/curvr/")
 )

@@ -6,16 +6,17 @@ Authors@R: person("Mannfred Masahiro Asada", "Boehm", email = "mannfred.boehm@ub
   role = c("aut", "cre"))
 Description: Calculates total curvature from landmarked specimens.
     Total curvature can be calculated from 
-    interpolating splines, or from the tangent angle function. 
+    interpolating splines, fitted circles, or from the tangent angle function. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.2.0)
 Imports: 
-    dplyr (>= 0.8.3)
+    dplyr (>= 1.1.2),
+    pracma (>= 2.4.2)
 Suggests: 
-    knitr (>= 1.28),
-    rmarkdown (>= 2.1),
-    testthat (>= 2.3.2)
+    knitr (>= 1.39),
+    rmarkdown (>= 2.14),
+    testthat (>= 3.1.4)
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr

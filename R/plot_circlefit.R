@@ -21,6 +21,8 @@
 #'
 #' @importFrom pracma circlefit
 #'
+#' @importFrom graphics points
+#'
 #' @export
 
 plot_circlefit <- function(landmark_matrix, x_range, npoints=1000, col='red', pch=1, ...) {
