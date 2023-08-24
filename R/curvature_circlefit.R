@@ -37,8 +37,9 @@ curvature_circlefit <- function(landmark_matrix, x_range) {
   # points(x=cx,y=cy, col='blue', pch=16)
 
   # find two points on circle that minimize distance from f(x) at x_range
-  fx_lower <- landmark_matrix[landmark_matrix == x_range[1]]
-  fx_upper <- landmark_matrix[landmark_matrix == x_range[2]]
+  # first, find indicies where `x_range` is in `landmark_matrix`
+  fx_lower <- landmark_matrix[landmark_matrix[,1] == x_range[1]]
+  fx_upper <- landmark_matrix[landmark_matrix[,1] == x_range[2]]
 
   # compute euclidian distances between curve bounds and fitted circle
   dist_lower <- numeric()
