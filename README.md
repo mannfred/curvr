@@ -1,7 +1,7 @@
 
 # curvr
 
-<img src="man/figures/curvr_hex_sticker.png" align="right" height="200" />
+<img src="man/figures/curvr_hex_sticker.png" align="left" height="150" />
 
 <!-- badges: start -->
 <!-- badges: end -->
