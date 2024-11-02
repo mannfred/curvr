@@ -5,8 +5,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of curvr is to ...
-
+&nbsp;
+&nbsp;
 ## Installation
 
 You can install the development version of curvr from [GitHub](https://github.com/) with:
@@ -15,7 +15,8 @@ You can install the development version of curvr from [GitHub](https://github.co
 # install.packages("devtools")
 devtools::install_github("mannfred/curvy")
 ```
-
+&nbsp;
+&nbsp;
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
