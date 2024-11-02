@@ -28,19 +28,28 @@
 #'
 #' @importFrom dplyr %>%
 #' @importFrom stats smooth.spline predict splinefun spline integrate
+#' @importFrom assertthat assert_that
 #'
 #' @export
 
 curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
 
+  # check that landmark_matrix has two columns
+  assert_that(is.matrix(landmark_matrix), ncol(landmark_matrix) == 2,
+              msg = "landmark_matrix must be a two-column matrix.")
+
+  # check that x_range has upper and lower bounds
+  assert_that(is.numeric(x_range), length(x_range) == 2,
+              msg = "x_range must be a numeric vector of length 2.")
+
+  # check for valid spline type
+  assert_that(type %in% c("smooth", "ip"),
+              msg = "type must be either 'smooth' or 'ip'.")
+
   # extract/separate x and y coords
   x_coords <- landmark_matrix[, 1]
   y_coords <- landmark_matrix[, 2]
 
-  # check that for every x there is a y
-  if (length(x_coords) != length(y_coords)) {
-    stop("every x coordinate must have a corresponding y coordinate")
-  }
 
   if (type == 'smooth'){
     # fit a spline to landmark coordinates
@@ -71,10 +80,6 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
 
     # create a function for second derivative
     s2func <- splinefun(x = s0$x, y = s1func(s0$x, deriv = 1))
-
-  } else {
-
-    stop("spline type must be 'ip' or 'smooth'")
 
   }
 
