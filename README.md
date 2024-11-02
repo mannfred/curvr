@@ -1,7 +1,6 @@
-
-# curvr
-
-<img src="man/figures/curvr_hex_sticker.png" align="left" height="150" />
+<p align="center">
+  <img src="man/figures/curvr_hex_sticker.png" align="left" height="100" />
+</p>
 
 <!-- badges: start -->
 <!-- badges: end -->
