@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
   <img src="man/figures/curvr_hex_sticker.png" height="120" />
 </p>
 
