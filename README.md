@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="man/figures/curvr_hex_sticker.png" align="left" height="120" />
+  <img src="man/figures/curvr_hex_sticker.png" height="120" />
 </p>
 
 
----
+<br>
 
 ## Installation
 
