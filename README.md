@@ -1,6 +1,8 @@
 
 # curvr
 
+<img src="man/figures/curvr_hex_sticker.png" align="right" height="200" />
+
 <!-- badges: start -->
 <!-- badges: end -->
 
@@ -24,5 +26,5 @@ library(curvr)
 ## basic example code
 ```
 ## Vignette 
-See the [Getting Started vignette](inst/doc/curvr.html) for an introduction to using the `curvr` package.
+See the [Getting Started vignette](doc/curvr.html) for an introduction to using the `curvr` package.
 
