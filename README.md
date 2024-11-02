@@ -3,8 +3,7 @@
 </p>
 
 
-<br>
-<br>
+---
 
 ## Installation
 
