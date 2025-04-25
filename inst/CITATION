@@ -1,17 +1,16 @@
 citHeader("To cite curvr in publications use:")
 
 citEntry(entry = "Article",
-  title        = "curvr: {a}n R package for measuring total curvature from landmarked specimens.",
-  author       = personList(as.person("Mannfred Masahiro Asada Boehm")),
-  journal      = "TBD",
-  year         = "2020",
-  volume       = "TBD",
-  number       = "TBD",
-  pages        = "1--5",
-  url          = "",
+ title={Plant-pollinator specialization: Origin and measurement of curvature},
+  author={Boehm, Mannfred M.A. and Jankowski, J.E. and Cronk, Q.C.B.},
+  year={2022},
+  journal={The American Naturalist},
+  volume={199},
+  number={2},
+  pages={206--222},
 
   textVersion  =
-  paste("Mannfred M.A. Boehm (2021).",
-        "curvr: an R package for measuring total curvature from landmarked specimens.",
-        "https://github.com/mannfred/curvr/")
+  paste("Mannfred M.A. Boehm, Jill E. Jankowski, Quentin C.B. Cronk (2022).",
+        "Plant-pollinator specialization: Origin and measurement of curvature",
+        "The American Naturalist, 199(2), 206-222")
 )
