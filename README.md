@@ -7,7 +7,7 @@
 
 ## Installation
 
-You can install the development version of curvr from [GitHub](https://github.com/) with:
+You can install the development version of `curvr` by:
 
 ``` r
 # install.packages("devtools")
@@ -31,23 +31,55 @@ Plant-pollinator specialization: Origin and measurement of curvature.
   pages={206--222}
 }
 ```
-
-
+<br>
+[Click here](https://mannfred.github.io/media/pdfs/Boehm_etal_2022_AmNat.pdf) for a .pdf of the paper. 
 <br>
 <br>
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This photograph of *Centropogon granulosus* and Buff-tailed Sicklebill was taken by 
+Julian Heavyside in the southeastern Andes of Peru:
+
+<p align="left">
+  <img src="man/figures/Figure_A2.jpg" height="300" />
+</p>
+
+<br>
+
+How curved is the bill of this hummingbird? One approach is to add landmarks along the 
+dorsal side of the bill using `geomorph`. Then, we can use `curvr` to calculate 
+total curvature from the landmarks. 
+
 
 ``` r
 library(curvr)
-## basic example code
+library(geomorph)
+
+# landmark the .jpg in this R package's directory
+geomorph::digitize2d(filelist="man/figures/Figure_A2.jpg", nlandmarks=10, tpsfile="sicklebill.tps", verbose=F)
+```
+Naturally, one would be more rigorous with landmarking for comparative purposes.
+This is for demonstration only.
+
+<p align="left">
+  <img src="man/figures/Figure_A2_lm.jpg" height="300" />
+</p>
+
+`curvr` fits a spline to these landmarks and calculates the curvature of the spline.
+
+```r
+# import the .tps file for curve-fitting
+tps <- readland.tps(file="man/figures/sicklebill.tps")
+
+# calculate curvature (curvr gives radians)
+ktot <- curvr::curvature_spline(tps[,,1], x_range=range(tps[,,1]))$Ktot
+
+# convert to degrees
+ktot * (180/pi)
+# 57.7 degrees
 ```
 
 <br>
 <br>
-
-## Vignette 
-See the [Getting Started vignette](doc/curvr.html) for an introduction to using the `curvr` package.
 
