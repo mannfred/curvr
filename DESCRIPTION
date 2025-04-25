@@ -5,8 +5,6 @@ Version: 0.0.1
 Authors@R: person("Mannfred Masahiro Asada", "Boehm", email = "mannfred.boehm@ubc.ca", 
   role = c("aut", "cre"))
 Description: Calculates total curvature from landmarked specimens.
-    Total curvature can be calculated from 
-    interpolating splines, fitted circles, or from the tangent angle function. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

@@ -11,10 +11,11 @@ You can install the development version of curvr from [GitHub](https://github.co
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mannfred/curvy")
+devtools::install_github("mannfred/curvr")
 ```
 
 If you find this package useful, please cite:
+<br>
 Boehm, M. M. A., Jankowski, J. E., & Cronk, Q. C. (2022). 
 Plant-pollinator specialization: Origin and measurement of curvature. 
 *The American Naturalist*, 199(2), 206-222.
