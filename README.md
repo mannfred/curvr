@@ -33,9 +33,9 @@ If you find this package useful, please cite:
 }
 ```
 
-[Click here](https://mannfred.github.io/media/pdfs/Boehm_etal_2022_AmNat.pdf) for a .pdf of the paper, 
-where we outline the motivation for this package, define "curvature", and demonstrate the use of this package 
-on *Epimedium* nectar spurs. 
+[Click here](https://mannfred.github.io/media/pdfs/Boehm_etal_2022_AmNat.pdf) 
+for a .pdf of the paper, where we outline the motivation for this package, 
+define "curvature", and offer a case study with *Epimedium* nectar spurs. 
 
 <br>
 <br>
@@ -68,7 +68,7 @@ geomorph::digitize2d(filelist="man/figures/Figure_A2.jpg", nlandmarks=10, tpsfil
 ```
 <br>
 
-Typically, one would need to be more rigorous with landmarking. 
+Typically, one would need to be more methodical with landmarking. 
 E.g. we have not told `digitize2d()` what the scale is
 (although curvature is scale invariant, it's still good practice). 
 
