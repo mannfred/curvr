@@ -110,6 +110,7 @@ lines(smooth.spline(tps[,,1]), lwd=2, col='red')
 </p>
 
 <br>
+
 ```
 # calculate curvature (curvr gives radians)
 ktot <- curvr::curvature_spline(tps[,,1], x_range=range(tps[,,1]))$Ktot
