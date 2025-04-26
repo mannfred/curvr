@@ -85,6 +85,32 @@ E.g. we have not told `digitize2d()` what the scale is
 # import the .tps file for curve-fitting
 tps <- readland.tps(file="man/figures/sicklebill.tps")
 
+# preview structure of the landmark file
+tps
+, , 1
+
+          [,1]     [,2]
+ [1,] 211.9709 230.2057
+ [2,] 191.8694 233.5560
+ [3,] 176.5540 230.6843
+ [4,] 164.1103 225.4197
+ [5,] 150.2307 216.8048
+ [6,] 141.1372 208.1899
+ [7,] 134.4368 198.6178
+ [8,] 127.2577 186.1740
+ [9,] 122.4716 170.3800
+[10,] 121.0358 145.0139
+
+plot(tps[,,1])
+lines(smooth.spline(tps[,,1]), lwd=2, col='red')
+```
+
+<p align="left">
+  <img src="man/figures/curvefit.jpeg" height="300" />
+</p>
+
+<br>
+```
 # calculate curvature (curvr gives radians)
 ktot <- curvr::curvature_spline(tps[,,1], x_range=range(tps[,,1]))$Ktot
 
