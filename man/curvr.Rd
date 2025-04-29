@@ -2,6 +2,7 @@
 % Please edit documentation in R/curvr.R
 \docType{package}
 \name{curvr}
+\alias{curvr-package}
 \alias{curvr}
 \title{curvr: Calculate Point-Wise Curvature From Landmarked Specimens}
 \description{
@@ -25,3 +26,7 @@ function are known. \code{as_expression()} converts a \code{Momocs} polynomial t
 expression so that derivatives can be computed using \code{stats::deriv3()}.
 }
 
+\author{
+\strong{Maintainer}: Mannfred Masahiro Asada Boehm \email{mannfred.boehm@ubc.ca}
+
+}
