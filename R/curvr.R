@@ -18,6 +18,6 @@
 #' function are known. \code{as_expression()} converts a \code{Momocs} polynomial to an
 #' expression so that derivatives can be computed using \code{stats::deriv3()}.
 #'
-#' @docType package
 #' @name curvr
+"_PACKAGE"
 NULL
