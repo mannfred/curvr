@@ -83,7 +83,7 @@ E.g. we have not told `digitize2d()` what the scale is
 
 ```r
 # import the .tps file for curve-fitting
-tps <- readland.tps(file="man/figures/sicklebill.tps")
+tps <- geomorph::readland.tps(system.file("extdata", "sicklebill.tps", package = "curvr"))
 
 # preview structure of the landmark file
 tps
