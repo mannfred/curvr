@@ -4,7 +4,13 @@
 \alias{curvature_spline}
 \title{Calculate total curvature from smoothing or interpolating splines.}
 \usage{
-curvature_spline(landmark_matrix, x_range, type = "smooth")
+curvature_spline(
+  landmark_matrix,
+  x_range,
+  type = "smooth",
+  spar = NULL,
+  plot = FALSE
+)
 }
 \arguments{
 \item{landmark_matrix}{is a \code{matrix} object with \code{[,1]}
@@ -18,7 +24,21 @@ calculate curvature. Concatenate the lower and upper bounds using
 \item{type}{either 'ip' for an interpolating spline or 'smooth' for a
 smoothing spline. Uses \code{stats::spline()} or \code{stats::smooth.spline()}, respectively,
 for curve fitting and estimating the derivatives. Default is \code{type = 'smooth'}.
-See: ?spline and ?smooth.spline for details.}
+An interpolating spline builds a piecewise-cubic curve that passes through every landmark.
+A smooth spline finds a compromise curve that stays close to the landmarks while remaining
+as smooth as possible (i.e. avoids sudden bending). These two goals are balanced by tuning \code{spar}.
+See ?spline and ?smooth.spline for more details.}
+
+\item{spar}{Only applicable when \code{type = 'smooth'}.
+A numeric between 0 and 1. Explicitly control the smoothing scale,
+i.e., how local versus global the curvature measurement is.
+For example, it may be desirable to smooth over a hook at the tip
+of a hummingbird bill as hook curvature, being scale invariant
+could contribute significantly to overall bill curvature. Setting \code{spar} close to
+zero will resemble an interpolating spline, while values closer to \code{1} will penalize sudden bends.
+See \code{stats::smooth.spline} for details.}
+
+\item{plot}{logical; if TRUE, shows a plot comparing the fitted spline to landmarks}
 }
 \value{
 a `list` with two named elements. `$Ktot` is the total curvature in radians. `$Ki` is a numeric vector of local curvature values.
