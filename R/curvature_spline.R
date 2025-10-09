@@ -12,7 +12,21 @@
 #' @param type either 'ip' for an interpolating spline or 'smooth' for a
 #' smoothing spline. Uses \code{stats::spline()} or \code{stats::smooth.spline()}, respectively,
 #' for curve fitting and estimating the derivatives. Default is \code{type = 'smooth'}.
-#' See: ?spline and ?smooth.spline for details.
+#' An interpolating spline builds a piecewise-cubic curve that passes through every landmark.
+#' A smooth spline finds a compromise curve that stays close to the landmarks while remaining
+#' as smooth as possible (i.e. avoids sudden bending). These two goals are balanced by tuning \code{spar}.
+#' See ?spline and ?smooth.spline for more details.
+#'
+#' @param spar Only applicable when \code{type = 'smooth'}.
+#' A numeric between 0 and 1. Explicitly control the smoothing scale,
+#' i.e., how local versus global the curvature measurement is.
+#' For example, it may be desirable to smooth over a hook at the tip
+#' of a hummingbird bill as hook curvature, being scale invariant
+#' could contribute significantly to overall bill curvature. Setting \code{spar} close to
+#' zero will resemble an interpolating spline, while values closer to \code{1} will penalize sudden bends.
+#' See \code{stats::smooth.spline} for details.
+#'
+#' @param plot logical; if TRUE, shows a plot comparing the fitted spline to landmarks
 #'
 #' @return a `list` with two named elements. `$Ktot` is the total curvature in radians. `$Ki` is a numeric vector of local curvature values.
 #'
@@ -32,7 +46,7 @@
 #'
 #' @export
 
-curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
+curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', spar = NULL, plot = FALSE) {
 
   # check that landmark_matrix has two columns
   assert_that(is.matrix(landmark_matrix), ncol(landmark_matrix) == 2,
@@ -53,7 +67,7 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
 
   if (type == 'smooth'){
     # fit a spline to landmark coordinates
-    s0 <- smooth.spline(landmark_matrix)
+    s0 <- smooth.spline(landmark_matrix, spar = spar)
 
     # first deriv values
     s1 <- predict(s0, deriv = 1)
@@ -94,7 +108,30 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth') {
   Ktot <- integrate(k_fun, lower = x_range[1], upper = x_range[2])$value
 
   # compute point-wise K from second deriv function
-  Ki <- s2func(landmark_matrix[,1])
+  Ki <- s2func(x_coords) / (1 + (s1func(x_coords))^2)^(3/2)
+
+  if (plot) {
+    op <- par(no.readonly = TRUE)
+    on.exit(par(op))
+    par(mfrow = c(1, 2), mar = c(4, 4, 2, 1))
+
+    # Left: geometry
+    plot(x_coords, y_coords, asp = 1, pch = 16, col = "grey40",
+         xlab = "x", ylab = "y", main = paste("Spline type:", type))
+    if (type == "smooth") {
+      lines(fitted$x, fitted$y, col = "dodgerblue", lwd = 2)
+      legend("topright", legend = sprintf("spar = %s", ifelse(is.null(spar), "auto", spar)),
+             bty = "n", text.col = "dodgerblue")
+    } else {
+      lines(fitted, col = "orange3", lwd = 2)
+    }
+
+    # Right: curvature profile
+    plot(x_coords, Ki, type = "l", col = "firebrick", lwd = 2,
+         xlab = "x", ylab = "Local curvature (1/length)",
+         main = "Pointwise curvature")
+    abline(h = 0, lty = 3)
+  }
 
   curvature <- list(Ktot = Ktot, Ki = Ki)
   return(curvature)
