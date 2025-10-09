@@ -68,7 +68,7 @@ geomorph::digitize2d(filelist="man/figures/Figure_A2.jpg", nlandmarks=11, tpsfil
 
 ```
 <br>
-Or, landmark in [tpsDig](https://www.sbmorphometrics.org/soft-dataacq.html), 
+Or, landmark in [tpsDig](https://www.sbmorphometrics.org), 
 as I've done to create the following figure (landmarks have been enlarged for emphasis):
 
 <p align="left">
