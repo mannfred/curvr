@@ -78,6 +78,8 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', spar = N
     # second deriv func (1st deriv of s1)
     s2func <- splinefun(x = s1$x, y = s1func(s1$x, deriv = 1))
 
+    fitted <- predict(s0, x_coords)
+
   } else if (type == 'ip'){
 
     # compute coordinates from a cubic spline fit
@@ -94,6 +96,8 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', spar = N
 
     # create a function for second derivative
     s2func <- splinefun(x = s0$x, y = s1func(s0$x, deriv = 1))
+
+    fitted <- data.frame(x = s0$x, y = s0$y)
 
   }
 
@@ -117,7 +121,7 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', spar = N
 
     # Left: geometry
     plot(x_coords, y_coords, asp = 1, pch = 16, col = "grey40",
-         xlab = "x", ylab = "y", main = paste("Spline type:", type))
+         xlab = "x", ylab = "y", main = paste("spline type:", type))
     if (type == "smooth") {
       lines(fitted$x, fitted$y, col = "dodgerblue", lwd = 2)
       legend("topright", legend = sprintf("spar = %s", ifelse(is.null(spar), "auto", spar)),
@@ -128,8 +132,8 @@ curvature_spline <- function(landmark_matrix, x_range, type = 'smooth', spar = N
 
     # Right: curvature profile
     plot(x_coords, Ki, type = "l", col = "firebrick", lwd = 2,
-         xlab = "x", ylab = "Local curvature (1/length)",
-         main = "Pointwise curvature")
+         xlab = "x", ylab = "local curvature (1/length)",
+         main = "pointwise curvature")
     abline(h = 0, lty = 3)
   }
 
