@@ -128,10 +128,6 @@ See `stats::smooth.spline` for more details.
 I have found that `spar` values around 0.2 to 0.4 work well for hummingbird bills.
 I suggest using `plot=TRUE` to see what works best for your study organism.
 
-In the above figure, the last two landmarks share the same x-coordinate,
-so the spline has taken the average y-value as the last point.
-I recommend using `Momocs::coo_alignxax` to align your curves
-to the x-axis, which ensures that the fitted spline is a single-valued function. 
 ```
 # calculate curvature (curvr gives radians)
 ktot <- curvr::curvature_spline(tps[,,1], x_range=x_range, spar=0.2)$Ktot
@@ -142,7 +138,43 @@ ktot * (180/pi)
 ```
 
 We obtain ~101° bill curvature for this Buff-tailed Sicklebill.
-This individual was also measured in Figure 1 of [this pollination study](https://onlinelibrary.wiley.com/doi/full/10.1002/ece3.8988).
+
+In the above figure, the last two landmarks share the same x-coordinate,
+so the spline has taken the average y-value as the last point.
+I recommend using `Momocs::coo_alignxax` to align your curves
+to the x-axis, which ensures that the fitted spline is a single-valued function. 
+
+```
+library(Momocs)
+
+# convert `tps` to a Momocs object
+tps_momocs <- Ldk(list(tps[,,1]))
+
+# align the longest axis of each shape along the x-axis
+tps_x <- Momocs::coo_alignxax(tps_momocs$coo)
+
+# re-plot
+x_range <- c(tps_x[1,1], tps_x[10,1])
+curvr::curvature_spline(tps_x, x_range, spar=0.2, plot=TRUE)
+
+ktot <- curvr::curvature_spline(tps_x, x_range=x_range, spar=0.2)$Ktot
+
+# convert to degrees
+ktot * (180/pi)
+# 92.7 degrees
+
+```
 <br>
+We obtain ~93° bill curvature (8% difference) for this Buff-tailed Sicklebill
+when the fitted function is single-valued.
+
 <br>
+<p align="left">
+  <img src="man/figures/curvefit2.jpeg" height="300" />
+</p>
+<br>
+
+<br>
+
+
 
